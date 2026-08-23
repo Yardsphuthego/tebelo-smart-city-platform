@@ -16,8 +16,13 @@
     <a href="{% url 'admin:operations_organisation_changelist' %}"{% if 'operations_organisation' in current %} class="is-active" aria-current="page"{% endif %}>Organisations</a>
     <a href="{% url 'admin:operations_serviceroutingpolicy_changelist' %}"{% if 'operations_serviceroutingpolicy' in current %} class="is-active" aria-current="page"{% endif %}>Routing</a>
     <a href="{% url 'admin:operations_dutyshift_changelist' %}"{% if 'operations_dutyshift' in current %} class="is-active" aria-current="page"{% endif %}>Duty shifts</a>
+    <a href="{% url 'admin:operations_location_changelist' %}"{% if 'operations_location' in current %} class="is-active" aria-current="page"{% endif %}>Locations</a>
+    <a href="{% url 'admin:operations_incidentcategory_changelist' %}"{% if 'operations_incidentcategory' in current %} class="is-active" aria-current="page"{% endif %}>Categories</a>
     <a href="{% url 'admin:accounts_user_changelist' %}"{% if 'accounts_user' in current %} class="is-active" aria-current="page"{% endif %}>Users & access</a>
+    <a href="{% url 'admin:operations_membership_changelist' %}"{% if current == 'operations_membership_changelist' or current == 'operations_membership_add' or current == 'operations_membership_change' %} class="is-active" aria-current="page"{% endif %}>Memberships</a>
+    <a href="{% url 'admin:operations_neighborhoodwatchmembership_changelist' %}"{% if 'operations_neighborhoodwatchmembership' in current %} class="is-active" aria-current="page"{% endif %}>Watch members</a>
     <a href="{% url 'admin:operations_operationalrecommendation_changelist' %}"{% if 'operations_operationalrecommendation' in current %} class="is-active" aria-current="page"{% endif %}>Governance</a>
+    <a href="{% url 'admin:core_auditevent_changelist' %}"{% if 'core_auditevent' in current %} class="is-active" aria-current="page"{% endif %}>Audit trail</a>
     <a href="{% url 'home' %}">Resident platform</a>
   </nav>
   {% endwith %}{% endif %}

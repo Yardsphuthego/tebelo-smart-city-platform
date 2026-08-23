@@ -1,8 +1,9 @@
 from datetime import timedelta
 from io import StringIO
 
+from django.contrib import admin
 from django.core.management import call_command
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 from accounts.models import User
@@ -474,6 +475,9 @@ class PageTests(TestCase):
         self.assertContains(response, "admin-ticker-track")
         self.assertContains(response, "admin-platform-nav")
         self.assertContains(response, "admin-account-menu")
+        self.assertContains(response, "admin-create-menu")
+        self.assertContains(response, "Create new")
+        self.assertContains(response, reverse("admin:operations_organisation_add"))
         self.assertContains(response, "css/palette.css")
         self.assertContains(response, 'class="is-active" aria-current="page">Overview</a>')
         account_panel = response.content.decode().split('class="admin-account-panel"', 1)[1].split("</details>", 1)[0]
@@ -486,6 +490,67 @@ class PageTests(TestCase):
 
         incidents = self.client.get(reverse("admin:operations_incident_changelist"))
         self.assertContains(incidents, 'class="is-active" aria-current="page">Incidents</a>')
+
+    def test_super_admin_has_full_control_and_can_create_an_organisation(self):
+        admin_user = User.objects.create_superuser(
+            email="network-admin@example.com", password="Very-secure-pass-123"
+        )
+        request = RequestFactory().get(reverse("admin:index"))
+        request.user = admin_user
+        for model, model_admin in admin.site._registry.items():
+            if model._meta.app_label not in {"accounts", "operations"}:
+                continue
+            with self.subTest(model=model._meta.label):
+                self.assertTrue(model_admin.has_view_permission(request))
+                self.assertTrue(model_admin.has_add_permission(request))
+                self.assertTrue(model_admin.has_change_permission(request))
+                self.assertTrue(model_admin.has_delete_permission(request))
+
+        audit_admin = admin.site._registry[AuditEvent]
+        self.assertTrue(audit_admin.has_view_permission(request))
+        self.assertFalse(audit_admin.has_add_permission(request))
+        self.assertFalse(audit_admin.has_change_permission(request))
+        self.assertFalse(audit_admin.has_delete_permission(request))
+
+        self.client.force_login(admin_user)
+        add_page = self.client.get(reverse("admin:operations_organisation_add"))
+        self.assertEqual(add_page.status_code, 200)
+        self.assertContains(add_page, "Add organisation")
+
+        location = Location.objects.get(code="gab")
+        response = self.client.post(
+            reverse("admin:operations_organisation_add"),
+            {
+                "name": "Gaborone Community Safety Office",
+                "short_name": "GCSO",
+                "kind": Organisation.Kind.GOVERNMENT,
+                "location": location.pk,
+                "emergency_phone": "+267 399 9999",
+                "integration_status": Organisation.IntegrationStatus.CONFIGURED,
+                "source_url": "https://example.gov.bw/safety",
+                "is_active": "on",
+                "_save": "Save",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(Organisation.objects.filter(short_name="GCSO", is_active=True).exists())
+
+        recommendation = self.client.post(
+            reverse("admin:operations_operationalrecommendation_add"),
+            {
+                "category": "service_quality",
+                "priority": OperationalRecommendation.Priority.MEDIUM,
+                "title": "Extend weekend service coverage",
+                "summary": "Measure demand and schedule accountable weekend coverage.",
+                "source_label": "Command review",
+                "source_url": "",
+                "status": OperationalRecommendation.Status.PROPOSED,
+                "_save": "Save",
+            },
+        )
+        self.assertEqual(recommendation.status_code, 302)
+        created = OperationalRecommendation.objects.get(title="Extend weekend service coverage")
+        self.assertTrue(created.fingerprint.startswith("manual:"))
 
     def test_delivery_engine_and_case_use_native_super_admin_layout(self):
         admin_user = User.objects.create_superuser(

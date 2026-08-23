@@ -1,3 +1,5 @@
+import hashlib
+
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline
 from unfold.decorators import display
@@ -123,12 +125,20 @@ class OperationalRecommendationAdmin(ModelAdmin):
     search_fields = ("title", "summary")
     readonly_fields = ("fingerprint", "evidence", "last_generated_at", "created_at", "updated_at")
 
+    def save_model(self, request, obj, form, change):
+        if not obj.fingerprint:
+            identity = f"{obj.category}|{obj.title}".strip().lower().encode()
+            obj.fingerprint = f"manual:{hashlib.sha256(identity).hexdigest()}"
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Organisation)
 class OrganisationAdmin(ModelAdmin):
     list_display = ("name", "short_name", "kind", "integration_status", "location", "is_active")
     list_filter = ("kind", "integration_status", "is_active", "location")
     search_fields = ("name", "short_name")
+    list_editable = ("integration_status", "is_active")
+    save_on_top = True
 
 
 for model in (Location, Membership, IncidentCategory, Evidence, NotificationPreference,

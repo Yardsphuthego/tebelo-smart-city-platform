@@ -1,5 +1,27 @@
 {% load i18n %}
 <div class="admin-top-actions">
+  <details class="admin-create-menu">
+    <summary><span class="material-symbols-outlined">add</span><b>Create new</b><i class="material-symbols-outlined">expand_more</i></summary>
+    <div class="admin-create-panel">
+      <span>Public operations</span>
+      <a href="{% url 'admin:operations_incident_add' %}"><b>Incident</b><small>Create an authorised incident record</small></a>
+      <a href="{% url 'admin:operations_servicedeskcase_add' %}"><b>Virtual-service case</b><small>Open a resident assistance case</small></a>
+      <a href="{% url 'admin:operations_alert_add' %}"><b>Public alert</b><small>Create an authorised city notice</small></a>
+      <a href="{% url 'admin:operations_neighborhoodwatchgroup_add' %}"><b>Watch group</b><small>Create a police-coordinated community group</small></a>
+      <span>City network</span>
+      <a href="{% url 'admin:operations_organisation_add' %}"><b>Organisation</b><small>Add an authority or service provider</small></a>
+      <a href="{% url 'admin:operations_location_add' %}"><b>Location</b><small>Add a city, ward or service area</small></a>
+      <a href="{% url 'admin:operations_incidentcategory_add' %}"><b>Incident category</b><small>Configure report classification and routing</small></a>
+      <a href="{% url 'admin:operations_serviceroutingpolicy_add' %}"><b>Routing policy</b><small>Define ownership and service deadlines</small></a>
+      <a href="{% url 'admin:operations_dutyshift_add' %}"><b>Duty shift</b><small>Schedule operational coverage</small></a>
+      <span>People</span>
+      <a href="{% url 'admin:accounts_user_add' %}"><b>User account</b><small>Create resident or authority access</small></a>
+      <a href="{% url 'admin:operations_membership_add' %}"><b>Organisation membership</b><small>Assign a user to an authority</small></a>
+      <a href="{% url 'admin:operations_neighborhoodwatchmembership_add' %}"><b>Watch membership</b><small>Add a resident to a Watch group</small></a>
+      <span>Governance</span>
+      <a href="{% url 'admin:operations_operationalrecommendation_add' %}"><b>Recommendation</b><small>Add an implementation recommendation</small></a>
+    </div>
+  </details>
   <details class="admin-account-menu">
     <summary><span class="admin-account-avatar">{% if user.profile_photo %}<img src="{{ user.profile_photo.url }}" alt="">{% else %}{{ user.first_name|first|default:'T' }}{{ user.last_name|first }}{% endif %}</span><span><strong>{{ user.get_full_name|default:user.email }}</strong><small>Super administrator</small></span><i class="material-symbols-outlined">expand_more</i></summary>
     <div class="admin-account-panel">
