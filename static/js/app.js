@@ -1,15 +1,22 @@
-const toggle = document.querySelector('.nav-toggle');
-const sidebar = document.querySelector('.app-sidebar');
-const overlay = document.querySelector('.sidebar-overlay');
-const closeButton = document.querySelector('.sidebar-close');
+const menuButton = document.querySelector('[data-workspace-menu-toggle]');
+const navigation = document.querySelector('[data-workspace-navigation]');
+const account = document.querySelector('[data-workspace-account]');
 
-function setSidebar(open) {
-  if (!sidebar || !overlay) return;
-  sidebar.classList.toggle('open', open);
-  overlay.classList.toggle('open', open);
-  if (toggle) toggle.setAttribute('aria-expanded', String(open));
+function closeMenus() {
+  if (navigation) navigation.classList.remove('is-open');
+  if (menuButton) menuButton.setAttribute('aria-expanded', 'false');
+  if (account) account.removeAttribute('open');
 }
 
-if (toggle) toggle.addEventListener('click', () => setSidebar(true));
-if (closeButton) closeButton.addEventListener('click', () => setSidebar(false));
-if (overlay) overlay.addEventListener('click', () => setSidebar(false));
+if (menuButton && navigation) menuButton.addEventListener('click', () => {
+  const open = !navigation.classList.contains('is-open');
+  closeMenus();
+  navigation.classList.toggle('is-open', open);
+  menuButton.setAttribute('aria-expanded', String(open));
+});
+
+document.addEventListener('click', (event) => {
+  if (account && account.open && !account.contains(event.target)) account.removeAttribute('open');
+});
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape') closeMenus(); });
+window.addEventListener('resize', () => { if (window.innerWidth > 980 && navigation) navigation.classList.remove('is-open'); });

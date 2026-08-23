@@ -441,6 +441,18 @@ class PageTests(TestCase):
             self.assertContains(response, reverse("public_incidents_geojson"))
             self.assertContains(response, reverse("public_watch_groups_geojson"))
 
+    def test_resident_workspace_uses_top_account_navigation(self):
+        resident = User.objects.create_user(
+            email="resident-navigation@example.com", password="Very-secure-pass-123"
+        )
+        self.client.force_login(resident)
+        response = self.client.get(reverse("dashboard"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "civic-top-strip")
+        self.assertContains(response, "workspace-account-menu")
+        self.assertContains(response, "My reports")
+        self.assertNotContains(response, "app-sidebar")
+
     def test_unfold_operations_dashboard_renders_for_staff(self):
         admin_user = User.objects.create_superuser(
             email="command@example.com", password="Very-secure-pass-123"
@@ -450,6 +462,9 @@ class PageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Gaborone Command")
         self.assertContains(response, "Active incident queue")
+        self.assertContains(response, "admin-civic-strip")
+        self.assertContains(response, "admin-account-menu")
+        self.assertNotContains(response, 'id="nav-sidebar"')
         self.assertContains(response, "js/loading.js")
         self.assertIn("'unsafe-eval'", response.headers["Content-Security-Policy"])
 
@@ -469,7 +484,8 @@ class PageTests(TestCase):
         self.assertEqual(workspace.status_code, 200)
         self.assertContains(workspace, "Delivery command")
         self.assertContains(workspace, "Unified operational queue")
-        self.assertContains(workspace, "People &amp; access")
+        self.assertContains(workspace, "Network & access")
+        self.assertContains(workspace, "admin-account-menu")
         self.assertContains(workspace, "css/admin.css")
         self.assertNotContains(workspace, "app-sidebar")
         self.assertRedirects(

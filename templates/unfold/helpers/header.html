@@ -1,0 +1,7 @@
+{% load unfold %}
+<header class="tebelo-admin-header">
+  <section class="admin-civic-strip" aria-label="Current city operations information"><strong>City operations</strong><div><span>Gaborone command network · Live service accountability</span><span>Police 999 · Fire 998 · Ambulance 997</span></div><a href="{% url 'admin_delivery_engine' %}">Open delivery command</a></section>
+  <div class="bg-white border-b border-base-200 px-4 z-40 dark:bg-base-900 dark:border-base-800 dark:text-font-default-dark {% element_classes 'header' %}">
+    <div class="flex items-center h-16 mx-auto max-w-none py-4 {% element_classes 'header_inner' %}"><div id="header-inner" class="flex items-center relative w-full"><div class="flex items-center w-full">{% block usertools %}{% if has_permission %}{% block welcome-msg %}{% include 'unfold/helpers/welcomemsg.html' %}{% endblock %}{% block userlinks %}{% include 'unfold/helpers/userlinks.html' %}{% endblock %}{% endif %}{% endblock %}</div></div></div>
+  </div>
+</header>

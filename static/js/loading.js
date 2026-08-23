@@ -55,6 +55,17 @@
     show(80);
   }, true);
 
+  document.addEventListener('click', (event) => {
+    document.querySelectorAll('.admin-account-menu[open]').forEach((menu) => {
+      if (!menu.contains(event.target)) menu.removeAttribute('open');
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    document.querySelectorAll('.admin-account-menu[open]').forEach((menu) => menu.removeAttribute('open'));
+  });
+
   window.addEventListener('pageshow', hide);
   window.addEventListener('pagehide', () => show(0));
   window.TebeloLoading = { show, hide };

@@ -35,3 +35,4 @@ if settings.DEBUG:
 
 admin.site.site_header = "TEBELO system administration"
 admin.site.site_title = "TEBELO Admin"
+admin.site.enable_nav_sidebar = False
