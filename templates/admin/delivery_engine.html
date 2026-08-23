@@ -5,12 +5,17 @@
 
 {% block content %}
 <main class="ops-dashboard admin-engine">
-  <header class="ops-heading">
-    <div>
-      <h1>Delivery command</h1>
-      <p>One accountable queue for incidents, virtual services, deadlines and authority ownership.</p>
+  <header class="overview-page-heading">
+    <div class="overview-heading-row">
+      <div class="overview-page-title">
+        <i aria-hidden="true"></i>
+        <h1>Delivery command</h1>
+      </div>
+      <div class="overview-subtitle-strip">
+        <p>One accountable queue for incidents, virtual services, deadlines and authority ownership.</p>
+      </div>
     </div>
-    <div class="ops-actions">
+    <div class="ops-actions overview-actions-row">
       <a href="{% url 'admin:operations_serviceroutingpolicy_changelist' %}" class="ops-button secondary"><span class="material-symbols-outlined">route</span>Routing</a>
       <a href="{% url 'admin:operations_dutyshift_changelist' %}" class="ops-button secondary"><span class="material-symbols-outlined">schedule</span>Duty coverage</a>
       <a href="{% url 'admin:operations_deliverycase_changelist' %}" class="ops-button"><span class="material-symbols-outlined">database</span>All records</a>

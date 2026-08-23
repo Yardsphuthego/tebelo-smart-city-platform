@@ -5,8 +5,8 @@
 .overview-page-title { align-items: stretch; display: flex; gap: 11px; min-width: 0; }
 .overview-page-title > i { background: linear-gradient(180deg,#011f4b,#7088a6); border-radius: 2px; flex: 0 0 3px; }
 .overview-page-title h1 { color: #00142f; font-size: 16px; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; margin: 0; }
-.overview-subtitle-strip { align-items: center; background: linear-gradient(90deg,transparent 0%,rgba(215,224,234,.58) 10%,#d7e0ea 28%,#d7e0ea 72%,rgba(215,224,234,.58) 90%,transparent 100%); display: flex; justify-content: center; min-height: 34px; padding: 5px 10%; }
-.overview-subtitle-strip p { color: #011f4b; font-size: 8px; font-weight: 700; letter-spacing: .18em; line-height: 1.4; margin: 0; text-align: center; text-transform: uppercase; }
+.overview-subtitle-strip { align-items: center; align-self: center; background: linear-gradient(90deg,transparent 0%,rgba(215,224,234,.58) 10%,#d7e0ea 28%,#d7e0ea 72%,rgba(215,224,234,.58) 90%,transparent 100%); display: flex; justify-content: center; justify-self: stretch; min-height: 34px; padding: 5px 10%; }
+.overview-subtitle-strip p { color: #011f4b; font-size: 8px; font-weight: 700; letter-spacing: .18em; line-height: 1.4; margin: 0; text-align: center; text-transform: uppercase; width: 100%; }
 .overview-subtitle-strip p span { color: #aab5c1; margin: 0 7px; }.overview-subtitle-strip time { font-style: normal; white-space: nowrap; }
 .overview-actions-row { flex: 0 0 auto; justify-content: flex-end; margin-top: 10px; }
 .admin-civic-strip > .admin-ticker-viewport { display: block; flex: 1; min-width: 0; overflow: hidden; }

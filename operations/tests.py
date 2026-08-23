@@ -569,6 +569,8 @@ class PageTests(TestCase):
         workspace = self.client.get(reverse("admin_delivery_engine"))
         self.assertEqual(workspace.status_code, 200)
         self.assertContains(workspace, "Delivery command")
+        self.assertContains(workspace, "overview-subtitle-strip")
+        self.assertContains(workspace, "One accountable queue")
         self.assertContains(workspace, "Unified operational queue")
         self.assertContains(workspace, "Users & access")
         self.assertContains(workspace, "admin-platform-nav")
