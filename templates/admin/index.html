@@ -7,20 +7,20 @@
 
 {% block content %}
 <div class="ops-dashboard">
-  <h1 class="admin-visually-hidden">Gaborone Command</h1>
-  <section class="overview-command-index" aria-label="Gaborone Command update">
-    <span class="command-index-edge">← <b>Gaborone</b></span>
-    <span>Command</span>
-    <strong>GC</strong>
-    <span>City safety</span>
-    <span>Public services</span>
-    <time>Updated {{ updated_at|date:"H:i:s" }} CAT&nbsp; →</time>
-  </section>
-  <div class="ops-actions overview-actions-row">
-    <a href="{{ incident_changelist_url }}" class="ops-button secondary"><span class="material-symbols-outlined">view_list</span>Incident queue</a>
-    <a href="{{ delivery_engine_url }}" class="ops-button secondary"><span class="material-symbols-outlined">acute</span>Service delivery</a>
-    <a href="{{ alert_add_url }}" class="ops-button"><span class="material-symbols-outlined">campaign</span>Issue alert</a>
-  </div>
+  <header class="overview-page-heading">
+    <div class="overview-page-title">
+      <i aria-hidden="true"></i>
+      <div>
+        <h1>Gaborone Command</h1>
+        <p>City safety and public-service activity <span>·</span> Updated <time>{{ updated_at|date:"H:i:s" }} CAT</time></p>
+      </div>
+    </div>
+    <div class="ops-actions overview-actions-row">
+      <a href="{{ incident_changelist_url }}" class="ops-button secondary"><span class="material-symbols-outlined">view_list</span>Incident queue</a>
+      <a href="{{ delivery_engine_url }}" class="ops-button secondary"><span class="material-symbols-outlined">acute</span>Service delivery</a>
+      <a href="{{ alert_add_url }}" class="ops-button"><span class="material-symbols-outlined">campaign</span>Issue alert</a>
+    </div>
+  </header>
 
   <div class="ops-kpis">
     <article><span class="kpi-icon teal material-symbols-outlined">emergency</span><div><small>Active incidents</small><strong>{{ ops.active }}</strong><p>{{ ops.unverified }} awaiting verification</p></div></article>
