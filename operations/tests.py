@@ -409,6 +409,7 @@ class PageTests(TestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertContains(response, "public-header")
                 self.assertContains(response, "js/theme.js")
+                self.assertContains(response, "js/loading.js")
                 self.assertNotContains(response, "app-sidebar")
 
     def test_landing_and_authenticated_dashboard_are_separate(self):
@@ -435,6 +436,7 @@ class PageTests(TestCase):
         for name in ("dashboard", "city_map"):
             response = self.client.get(reverse(name))
             self.assertContains(response, "data-tebelo-map")
+            self.assertContains(response, "map-container is-loading")
             self.assertContains(response, "js/maps.js")
             self.assertContains(response, reverse("public_incidents_geojson"))
             self.assertContains(response, reverse("public_watch_groups_geojson"))
@@ -448,6 +450,7 @@ class PageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Gaborone Command")
         self.assertContains(response, "Active incident queue")
+        self.assertContains(response, "js/loading.js")
         self.assertIn("'unsafe-eval'", response.headers["Content-Security-Policy"])
 
     def test_delivery_engine_and_case_use_native_super_admin_layout(self):

@@ -2,8 +2,13 @@
   const element = document.querySelector('[data-tebelo-map]');
   if (!element) return;
 
-  const feedback = element.parentElement.querySelector('[data-map-feedback]');
+  const mapContainer = element.parentElement;
+  const feedback = mapContainer.querySelector('[data-map-feedback]');
   const locateButtons = document.querySelectorAll('[data-map-locate]');
+  const setLoading = (loading) => {
+    mapContainer.classList.toggle('is-loading', loading);
+    element.setAttribute('aria-busy', String(loading));
+  };
   const setFeedback = (message, state = '') => {
     if (!feedback) return;
     feedback.textContent = message;
@@ -12,6 +17,7 @@
   };
 
   if (typeof window.maplibregl === 'undefined' || typeof window.maplibregl.Map !== 'function') {
+    setLoading(false);
     setFeedback('The interactive map library could not be loaded. Check your connection and try again.', 'error');
     return;
   }
@@ -28,6 +34,7 @@
       cooperativeGestures: overview,
     });
   } catch (error) {
+    setLoading(false);
     setFeedback('This browser cannot initialise the interactive map. Enable hardware acceleration or use a current browser.', 'error');
     return;
   }
@@ -177,8 +184,12 @@
       });
       map.fitBounds(bounds, { padding: 70, maxZoom: 14, duration: 700 });
     }
+    setLoading(false);
     setFeedback('');
-  }).catch(() => setFeedback('The map service is temporarily unavailable. Please retry shortly.', 'error'));
+  }).catch(() => {
+    setLoading(false);
+    setFeedback('The map service is temporarily unavailable. Please retry shortly.', 'error');
+  });
 
   map.on('idle', () => setFeedback(''));
   const refreshSize = () => window.requestAnimationFrame(() => map.resize());

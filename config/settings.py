@@ -126,6 +126,7 @@ UNFOLD = {
     "SHOW_VIEW_ON_SITE": True,
     "BORDER_RADIUS": "10px",
     "STYLES": [lambda request: static("css/admin.css")],
+    "SCRIPTS": [lambda request: static("js/loading.js")],
     "COLORS": {
         "primary": {
             "50": "oklch(97.3% .014 178)", "100": "oklch(94.4% .032 177)",
