@@ -1,0 +1,37 @@
+/* TEBELO civic palette: replace legacy green/teal while preserving semantic red and amber. */
+:root {
+  --ink: #00142f;
+  --muted: #60738a;
+  --line: #d8e1eb;
+  --soft: #f3f6f9;
+  --accent: #011f4b;
+  --accent-dark: #00142f;
+  --sidebar: #00142f;
+  --shadow: 0 8px 24px rgba(0, 20, 47, .07);
+}
+.public-utilitybar { background: #00142f; }
+.public-utilitybar .audience-nav .active { background: #7088a6; }
+.public-header nav > a:not(.button),.public-nav-dropdown > summary { color: #10233d; }
+.public-dropdown-panel { box-shadow: 0 18px 40px rgba(0, 20, 47, .16); }
+.public-dropdown-panel > a:hover,.theme-panel button:hover { background: #f0f3f7; }
+.public-eyebrow i,.status-indicator,.map-summary i { background: #7088a6; box-shadow: 0 0 0 4px #e5eaf0; }
+.metric-symbol,.professional-empty > span,.empty-state > span,.user-menu > span { background: #e8eef5; color: #011f4b; }
+.field input:focus,.field select:focus,.field textarea:focus { border-color: #7088a6; box-shadow: 0 0 0 3px #dfe6ef; }
+.privacy-chip,.activity-note,.chat-message { background: #f0f3f7; }
+.chat-message.mine { background: #e8eef5; }
+.status-tag.resolved,.status-tag.closed,.priority.low,.case-status.resolved,.case-status.closed { background: #e8f0f8; color: #315f85; }
+.timeline i { background: #7088a6; border-color: #dfe7f0; }
+.legend-dot.utilities { background: #7088a6; }
+.public-governance { background: #00142f; }
+.public-governance .kicker { color: #91a5ba; }
+.governance-list span,.public-footer { color: #91a5ba; }
+.watch-card header b,.watch-profile-status strong { background: #e8eef5; color: #011f4b; }
+.network-hub i::before { background: #7088a6; box-shadow: 0 0 0 3px rgba(112, 136, 166, .2); }
+.featured-service-row div > small { color: #91a6bc; }
+
+.ops-eyebrow i { background: #7088a6; box-shadow: 0 0 0 4px #e5eaf0; }
+.ops-label.low,.ops-stage.resolved,.ops-stage.closed { background: #e8f0f8; color: #315f85; }
+.ops-status i.resolved { background: #7088a6; }
+.ops-empty .material-symbols-outlined { color: #7088a6; }
+.priority-donut { background: conic-gradient(#c74646 0 calc(var(--critical)*1%),#d98e29 calc(var(--critical)*1%) calc((var(--critical) + var(--high))*1%),#477cac calc((var(--critical) + var(--high))*1%) calc((var(--critical) + var(--high) + var(--medium))*1%),#7088a6 0); }
+.priority-legend i { background: #7088a6; }

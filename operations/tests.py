@@ -409,6 +409,7 @@ class PageTests(TestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertContains(response, "public-header")
                 self.assertContains(response, "css/interactions.css")
+                self.assertContains(response, "css/palette.css")
                 self.assertContains(response, "js/theme.js")
                 self.assertContains(response, "js/loading.js")
                 self.assertNotContains(response, "app-sidebar")
@@ -473,6 +474,7 @@ class PageTests(TestCase):
         self.assertContains(response, "admin-ticker-track")
         self.assertContains(response, "admin-platform-nav")
         self.assertContains(response, "admin-account-menu")
+        self.assertContains(response, "css/palette.css")
         self.assertContains(response, 'class="is-active" aria-current="page">Overview</a>')
         account_panel = response.content.decode().split('class="admin-account-panel"', 1)[1].split("</details>", 1)[0]
         self.assertIn("Security settings", account_panel)

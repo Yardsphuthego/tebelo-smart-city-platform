@@ -129,16 +129,15 @@ UNFOLD = {
         lambda request: static("css/admin.css"),
         lambda request: static("css/admin-nav.css"),
         lambda request: static("css/interactions.css"),
+        lambda request: static("css/palette.css"),
     ],
     "SCRIPTS": [lambda request: static("js/loading.js")],
     "COLORS": {
         "primary": {
-            "50": "oklch(97.3% .014 178)", "100": "oklch(94.4% .032 177)",
-            "200": "oklch(88.7% .061 175)", "300": "oklch(80.2% .105 173)",
-            "400": "oklch(68.7% .13 171)", "500": "oklch(57.4% .125 169)",
-            "600": "oklch(48.2% .105 169)", "700": "oklch(40.4% .087 170)",
-            "800": "oklch(34.2% .069 171)", "900": "oklch(29.8% .056 173)",
-            "950": "oklch(19.6% .039 173)",
+            "50": "#f4f6f9", "100": "#e8eef5", "200": "#d7e0ea",
+            "300": "#b2c0cf", "400": "#90a5bc", "500": "#7088a6",
+            "600": "#526987", "700": "#405269", "800": "#27364b",
+            "900": "#011f4b", "950": "#00142f",
         }
     },
     "SIDEBAR": {
