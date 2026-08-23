@@ -1,0 +1,10 @@
+{% extends 'public_base.html' %}
+{% block title %}{{ case.reference }} — TEBELO{% endblock %}
+{% block content %}
+<section class="page shell narrow virtual-case-page">
+  <div class="virtual-case-title"><div><span class="kicker">{{ case.get_desk_display }}</span><h1>{{ case.subject }}</h1><p>{{ case.reference }} · Opened {{ case.created_at|date:'j M Y, H:i' }}</p></div><span class="case-status {{ case.status }}">{{ case.get_status_display }}</span></div>
+  <dl class="virtual-case-metadata"><div><dt>Request</dt><dd>{{ case.get_request_type_display }}</dd></div><div><dt>Service route</dt><dd>{{ case.assigned_organisation|default:'Central routing queue' }}</dd></div><div><dt>Preferred contact</dt><dd>{{ case.get_preferred_contact_display }}</dd></div><div><dt>Language</dt><dd>{{ case.get_preferred_language_display }}</dd></div></dl>
+  <div class="virtual-case-notice"><strong>Protected conversation</strong><span>This case is visible only to you and authorised service personnel. Do not use it for an immediate emergency.</span></div>
+  <div class="chat-card"><div class="messages-list">{% for item in case.messages.all %}<article class="chat-message {% if item.sender == user %}mine{% endif %}"><strong>{{ item.sender.get_full_name|default:item.sender.phone_number|default:item.sender.email }}</strong><p>{{ item.body|linebreaksbr }}</p><time>{{ item.created_at|date:'j M, H:i' }}</time></article>{% endfor %}</div>{% if not case.is_closed %}<form method="post" action="{% url 'service_message' case.pk %}" class="chat-form">{% csrf_token %}<label for="body">Reply</label><textarea id="body" name="body" rows="3" maxlength="2000" required></textarea><button class="button button-primary">Send secure message</button></form>{% endif %}</div>
+</section>
+{% endblock %}

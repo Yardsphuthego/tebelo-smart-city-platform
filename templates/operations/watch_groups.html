@@ -1,0 +1,22 @@
+{% extends 'public_base.html' %}
+{% block title %}Neighborhood Watch — TEBELO{% endblock %}
+{% block content %}
+<section class="page shell watch-directory">
+  <header class="watch-heading">
+    <div><span class="kicker">Police–community partnership</span><h1>Neighborhood Watch</h1><p>Find a police-reviewed group for your area, request membership, and share structured community-safety reports.</p></div>
+    <div class="heading-actions"><a class="button button-light" href="{% url 'city_map' %}">View on city map</a><a class="button button-primary" href="{% url 'watch_group_create' %}">Propose a group</a></div>
+  </header>
+  <div class="watch-trust-strip"><strong>Managed with police oversight</strong><span>Group boundaries are public. Member identities, private reports and evidence are restricted.</span><a href="tel:999">Emergency: 999</a></div>
+
+  {% if created_groups %}<section class="watch-pending"><header><span>Your proposals</span><strong>Awaiting or requiring police review</strong></header>{% for group in created_groups %}<a href="{% url 'watch_group_detail' group.pk %}"><span>{{ group.reference }}</span><strong>{{ group.name }}</strong><small>{{ group.area }} · {{ group.get_status_display }}</small></a>{% endfor %}</section>{% endif %}
+
+  <section class="watch-grid">
+    {% for group in groups %}<article class="watch-card">
+      <header><span>{{ group.reference }}</span><b>Police reviewed</b></header>
+      <h2>{{ group.name }}</h2><p>{{ group.description|truncatechars:180 }}</p>
+      <dl><div><dt>Area</dt><dd>{{ group.area }}</dd></div><div><dt>Coverage</dt><dd>{{ group.radius_km }} km</dd></div><div><dt>Members</dt><dd>{{ group.member_count }}</dd></div><div><dt>Reports</dt><dd>{{ group.report_count }}</dd></div></dl>
+      <footer><span>{% if group.current_membership %}{{ group.current_membership.get_status_display }}{% else %}Open for join requests{% endif %}</span><a href="{% url 'watch_group_detail' group.pk %}">Open group →</a></footer>
+    </article>{% empty %}<div class="watch-empty"><strong>No active Watch groups yet</strong><p>Residents can propose an area group. Police review it before it becomes discoverable or appears on the public map.</p><a class="button button-primary" href="{% url 'watch_group_create' %}">Propose the first group</a></div>{% endfor %}
+  </section>
+</section>
+{% endblock %}

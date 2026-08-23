@@ -1,0 +1,54 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block title %}Operational dashboard | TEBELO Command{% endblock %}
+{% block branding %}{% include "unfold/helpers/site_branding.html" %}{% endblock %}
+
+{% block content %}
+<div class="ops-dashboard">
+  <div class="ops-heading">
+    <div>
+      <p class="ops-eyebrow"><i></i> Live operational picture</p>
+      <h1>Gaborone Command</h1>
+      <p>City safety and public-service activity · Updated {{ updated_at|date:"H:i:s" }} CAT</p>
+    </div>
+    <div class="ops-actions">
+      <a href="{{ incident_changelist_url }}" class="ops-button secondary"><span class="material-symbols-outlined">view_list</span>Incident queue</a>
+      <a href="{{ delivery_engine_url }}" class="ops-button secondary"><span class="material-symbols-outlined">acute</span>Service delivery</a>
+      <a href="{{ alert_add_url }}" class="ops-button"><span class="material-symbols-outlined">campaign</span>Issue alert</a>
+    </div>
+  </div>
+
+  <div class="ops-kpis">
+    <article><span class="kpi-icon teal material-symbols-outlined">emergency</span><div><small>Active incidents</small><strong>{{ ops.active }}</strong><p>{{ ops.unverified }} awaiting verification</p></div></article>
+    <article><span class="kpi-icon red material-symbols-outlined">crisis_alert</span><div><small>Critical priority</small><strong>{{ ops.critical }}</strong><p>Immediate command attention</p></div></article>
+    <article><span class="kpi-icon blue material-symbols-outlined">today</span><div><small>Reports today</small><strong>{{ ops.reported_today }}</strong><p>{{ ops.resolved_today }} resolved today</p></div></article>
+    <article><span class="kpi-icon amber material-symbols-outlined">acute</span><div><small>Delivery overdue</small><strong>{{ ops.delivery_overdue }}</strong><p>{{ ops.recommendations }} recommendations · {{ ops.open_desks }} virtual cases</p></div></article>
+  </div>
+
+  <div class="ops-layout">
+    <section class="ops-panel queue-panel-admin">
+      <header><div><span class="material-symbols-outlined">format_list_bulleted</span><div><h2>Active incident queue</h2><p>Newest operational activity</p></div></div><a href="{{ incident_changelist_url }}">View complete queue</a></header>
+      <div class="ops-table-wrap"><table class="ops-table"><thead><tr><th>Reference</th><th>Incident</th><th>Priority</th><th>Status</th><th>Authority</th><th>Age</th></tr></thead><tbody>
+      {% for incident in recent_incidents %}<tr data-href="{% url 'admin:operations_incident_change' incident.pk %}"><td><a href="{% url 'admin:operations_incident_change' incident.pk %}">{{ incident.reference }}</a></td><td><strong>{{ incident.category.name }}</strong><small>{{ incident.address|default:"GPS location attached"|truncatechars:35 }}</small></td><td><span class="ops-label {{ incident.priority }}">{{ incident.get_priority_display }}</span></td><td><span class="ops-status"><i class="{{ incident.status }}"></i>{{ incident.get_status_display }}</span></td><td>{{ incident.assigned_organisation.short_name|default:"Unassigned" }}</td><td>{{ incident.created_at|timesince }}</td></tr>
+      {% empty %}<tr><td colspan="6"><div class="ops-empty"><span class="material-symbols-outlined">check_circle</span><strong>Operational queue clear</strong><p>No active incidents require attention.</p></div></td></tr>{% endfor %}
+      </tbody></table></div>
+    </section>
+
+    <aside class="ops-stack">
+      <section class="ops-panel priority-panel"><header><div><span class="material-symbols-outlined">donut_large</span><div><h2>Priority distribution</h2><p>Current active incidents</p></div></div></header><div class="priority-donut" style="--critical:{{ priority_rows.3.percent }};--high:{{ priority_rows.2.percent }};--medium:{{ priority_rows.1.percent }}"><div><strong>{{ ops.active }}</strong><small>active</small></div></div><div class="priority-legend">{% for row in priority_rows %}<div><span><i class="{{ row.value }}"></i>{{ row.label }}</span><strong>{{ row.count }} <small>{{ row.percent }}%</small></strong></div>{% endfor %}</div></section>
+    </aside>
+
+    <section class="ops-panel trend-panel">
+      <header><div><span class="material-symbols-outlined">monitoring</span><div><h2>Seven-day report volume</h2><p>All incident reports received</p></div></div><span>Last 7 days</span></header>
+      <div class="trend-chart">{% for day in daily_incidents %}<div><span class="bar-value">{{ day.total }}</span><i style="height:{{ day.height }}%"></i><small>{{ day.label }}</small></div>{% endfor %}</div>
+    </section>
+
+    <section class="ops-panel authority-panel">
+      <header><div><span class="material-symbols-outlined">account_balance</span><div><h2>Authority workload</h2><p>Open assigned incidents</p></div></div><a href="{% url 'admin:operations_organisation_changelist' %}">Manage network</a></header>
+      <div class="authority-list">{% for org in organisation_load %}<a href="{% url 'admin:operations_organisation_change' org.pk %}"><span class="authority-mark">{{ org.short_name|slice:":2" }}</span><div><strong>{{ org.short_name }}</strong><small>{{ org.get_kind_display }}</small></div><b>{{ org.open_cases }} <small>open</small></b></a>{% empty %}<div class="ops-empty compact"><span class="material-symbols-outlined">domain_disabled</span><strong>No participating authorities configured</strong></div>{% endfor %}</div>
+    </section>
+  </div>
+</div>
+{% endblock %}

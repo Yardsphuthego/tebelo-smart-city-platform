@@ -1,0 +1,38 @@
+{% extends 'public_base.html' %}
+{% block title %}Virtual public services — TEBELO{% endblock %}
+{% block content %}
+<section class="page shell virtual-services-page">
+  <header class="virtual-services-heading">
+    <div><span class="kicker">Access beyond the office</span><h1>Virtual public services</h1><p>Reach participating services securely from your phone, including communities without a nearby physical office.</p></div>
+    <a class="emergency-service-link" href="tel:999"><span>Emergency</span><strong>Call 999</strong></a>
+  </header>
+
+  <nav class="service-channel-nav" aria-label="Virtual service channels">
+    <a class="{% if selected_desk == 'police' %}active{% endif %}" href="{% url 'service_desks' %}?desk=police"><span>01</span><div><strong>Virtual Police Station</strong><small>Non-emergency police assistance</small></div></a>
+    <a class="{% if selected_desk == 'government' %}active{% endif %}" href="{% url 'service_desks' %}?desk=government"><span>02</span><div><strong>Government Virtual Assistance</strong><small>Information, guidance and referrals</small></div></a>
+  </nav>
+
+  <section class="service-channel-brief">
+    {% if selected_desk == 'government' %}
+      <div><span>Government Virtual Assistance</span><h2>Find the right government service without travelling from office to office.</h2></div>
+      <ul><li>Understand which service or authority you need</li><li>Receive application and document guidance</li><li>Request a referral to a participating service</li></ul>
+    {% else %}
+      <div><span>Virtual Police Station</span><h2>Extend non-emergency police access beyond the physical station.</h2></div>
+      <ul><li>Request non-emergency police assistance</li><li>Follow up an existing case or TEBELO report</li><li>Access crime-prevention and community-safety guidance</li></ul>
+    {% endif %}
+  </section>
+
+  <div class="virtual-service-warning"><strong>This is not an emergency line.</strong><span>Call 999 when there is immediate danger. Some police and government matters may still require identity checks, original documents or attendance at a physical office.</span></div>
+
+  <div class="virtual-service-workspace">
+    <section class="virtual-case-form">
+      <header><span>New request</span><h2>Open a secure virtual-service case</h2><p>Your case receives a reference and remains visible in your account.</p></header>
+      <form method="post">{% csrf_token %}{% include 'includes/form_fields.html' %}<button class="button button-primary button-full">Submit secure request</button></form>
+    </section>
+    <aside class="virtual-case-list">
+      <header><span>Your cases</span><h2>Service history</h2></header>
+      {% for case in cases %}<a href="{% url 'service_case' case.pk %}"><div><small>{{ case.reference }}</small><strong>{{ case.subject }}</strong><span>{{ case.get_desk_display }}</span></div><b class="case-status {{ case.status }}">{{ case.get_status_display }}</b><time>{{ case.updated_at|timesince }} ago</time></a>{% empty %}<div class="terminal-empty"><strong>No virtual-service cases</strong><p>Your submitted requests will appear here.</p></div>{% endfor %}
+    </aside>
+  </div>
+</section>
+{% endblock %}

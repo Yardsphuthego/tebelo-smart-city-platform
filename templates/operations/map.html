@@ -1,0 +1,10 @@
+{% extends 'public_base.html' %}{% load static %}
+{% block title %}Live city map — TEBELO{% endblock %}
+{% block head %}<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">{% endblock %}
+{% block content %}
+<section class="map-page">
+  <div class="map-toolbar shell"><div><span class="kicker">Public operational picture</span><h1>Live city map</h1><p>Verified incidents and police-reviewed Neighborhood Watch coverage across Gaborone.</p></div><div class="map-toolbar-actions"><div class="map-legend"><span><i class="legend-dot safety"></i>Safety</span><span><i class="legend-dot traffic"></i>Traffic</span><span><i class="legend-dot fire"></i>Fire</span><span><i class="legend-dot utilities"></i>Utilities</span><span><i class="legend-dot watch"></i>Watch area</span></div><button class="button button-light" type="button" data-map-locate>Find my location</button></div></div>
+  <div class="map-container full-map-container"><div id="map" data-tebelo-map data-mode="full" data-endpoint="{% url 'public_incidents_geojson' %}" data-watch-endpoint="{% url 'public_watch_groups_geojson' %}" data-style-url="{{ map_style_url }}" aria-label="Interactive map of public incidents and Neighborhood Watch groups"></div><div class="map-feedback" data-map-feedback>Loading map…</div></div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script><script src="{% static 'js/maps.js' %}" defer></script>{% endblock %}

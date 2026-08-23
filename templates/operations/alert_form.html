@@ -1,0 +1,2 @@
+{% extends 'base.html' %}{% block title %}Create city alert — TEBELO{% endblock %}{% block content %}<section class="page shell narrow"><div class="page-heading"><span class="kicker">Authorised publishing</span><h1>Create city alert</h1><p>Public alerts must contain verified, non-accusatory information appropriate for the selected audience.</p></div><div class="form-card"><form method="post">{% csrf_token %}{% include 'includes/form_fields.html' %}<button class="button button-primary">Save alert</button></form></div></section>{% endblock %}
+

@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block title %}{{ delivery.reference }} | TEBELO Command{% endblock %}
+
+{% block content %}
+<main class="ops-dashboard admin-case-detail">
+  <nav class="admin-back"><a href="{% url 'admin_delivery_engine' %}"><span class="material-symbols-outlined">arrow_back</span>Delivery command</a><span>/</span><strong>{{ delivery.reference }}</strong></nav>
+  <header class="ops-heading case-heading">
+    <div><p class="ops-eyebrow"><i></i>{{ delivery.get_stage_display }}</p><h1>{{ delivery.reference }}</h1><p>{{ delivery.subject }}</p></div>
+    <div class="ops-actions">{% if delivery.incident_id %}<a class="ops-button secondary" href="{% url 'admin:operations_incident_change' delivery.incident_id %}"><span class="material-symbols-outlined">emergency</span>Incident record</a>{% else %}<a class="ops-button secondary" href="{% url 'admin:operations_servicedeskcase_change' delivery.service_case_id %}"><span class="material-symbols-outlined">forum</span>Service conversation</a>{% endif %}</div>
+  </header>
+
+  <section class="case-facts">
+    <article><small>Responsible authority</small><strong>{{ delivery.organisation|default:'Central routing' }}</strong></article>
+    <article><small>Case owner</small><strong>{{ delivery.assigned_to|default:'Unassigned' }}</strong></article>
+    <article><small>Routing policy</small><strong>{{ delivery.policy|default:'Default service level' }}</strong></article>
+    <article><small>Escalation</small><strong>{% if delivery.escalation_level %}Level {{ delivery.escalation_level }} · {{ delivery.escalated_to|default:'Command' }}{% else %}None{% endif %}</strong></article>
+  </section>
+
+  <section class="ops-panel case-actions-panel"><header><div><span class="material-symbols-outlined">bolt</span><div><h2>Case actions</h2><p>Every action is written to the operational audit trail</p></div></div><span class="ops-stage {{ delivery.stage }}">{{ delivery.get_stage_display }}</span></header><div class="case-action-row">
+    {% if not delivery.acknowledged_at %}<form method="post" action="{% url 'delivery_case_action' delivery.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'admin_delivery_case_detail' delivery.pk %}"><button name="action" value="acknowledge"><span class="material-symbols-outlined">task_alt</span>Acknowledge</button></form>{% endif %}
+    {% if not delivery.assigned_to_id %}<form method="post" action="{% url 'delivery_case_action' delivery.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'admin_delivery_case_detail' delivery.pk %}"><button name="action" value="assign_self"><span class="material-symbols-outlined">person_add</span>Assign to me</button></form>{% endif %}
+    {% if delivery.stage != 'in_progress' and delivery.stage != 'resolved' and delivery.stage != 'closed' %}<form method="post" action="{% url 'delivery_case_action' delivery.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'admin_delivery_case_detail' delivery.pk %}"><button name="action" value="start"><span class="material-symbols-outlined">play_arrow</span>Start work</button></form>{% endif %}
+  </div></section>
+
+  <div class="case-detail-grid">
+    <div class="case-main-column">
+      <section class="ops-panel deadline-panel"><header><div><span class="material-symbols-outlined">timer</span><div><h2>Service commitments</h2><p>Policy deadlines and completion evidence</p></div></div></header><div class="deadline-grid"><article class="{% if not delivery.acknowledged_at and delivery.acknowledgement_due_at < now %}late{% endif %}"><span>Acknowledgement</span><strong>{{ delivery.acknowledgement_due_at|date:'d M Y · H:i' }}</strong><small>{% if delivery.acknowledged_at %}Completed {{ delivery.acknowledged_at|date:'d M · H:i' }}{% else %}{{ delivery.acknowledgement_due_at|timeuntil }} remaining{% endif %}</small></article><article class="{% if not delivery.assigned_to_id and delivery.assignment_due_at < now %}late{% endif %}"><span>Assignment</span><strong>{{ delivery.assignment_due_at|date:'d M Y · H:i' }}</strong><small>{% if delivery.assigned_at %}Completed {{ delivery.assigned_at|date:'d M · H:i' }}{% else %}{{ delivery.assignment_due_at|timeuntil }} remaining{% endif %}</small></article><article class="{% if delivery.resolution_due_at < now and delivery.stage != 'resolved' and delivery.stage != 'closed' %}late{% endif %}"><span>Resolution</span><strong>{{ delivery.resolution_due_at|date:'d M Y · H:i' }}</strong><small>{{ delivery.resolution_due_at|timeuntil }} remaining</small></article></div></section>
+      <section class="ops-panel timeline-panel"><header><div><span class="material-symbols-outlined">history</span><div><h2>Operational timeline</h2><p>Chronological ownership and workflow record</p></div></div></header><ol class="admin-timeline">{% for event in delivery.events.all %}<li><i></i><div><header><strong>{{ event.event_type|title }}</strong><time>{{ event.created_at|date:'d M Y · H:i:s' }}</time></header><p>{{ event.note|default:'Workflow state recorded.' }}</p><small>{{ event.actor|default:'TEBELO engine' }}{% if event.organisation %} · {{ event.organisation.short_name }}{% endif %}</small></div></li>{% empty %}<li><div><strong>No workflow events recorded</strong></div></li>{% endfor %}</ol></section>
+    </div>
+    <aside class="case-side-column"><section class="ops-panel handoff-panel"><header><div><span class="material-symbols-outlined">move_up</span><div><h2>Authority handoff</h2><p>Request accountable ownership transfer</p></div></div></header><form method="post" action="{% url 'delivery_handoff_request' delivery.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'admin_delivery_case_detail' delivery.pk %}">{{ form.as_p }}<button>Request handoff</button></form></section></aside>
+  </div>
+</main>
+{% endblock %}

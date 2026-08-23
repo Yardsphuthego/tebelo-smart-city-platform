@@ -1,0 +1,11 @@
+{% extends 'public_base.html' %}
+{% block title %}Propose a Neighborhood Watch — TEBELO{% endblock %}
+{% block content %}
+<section class="page shell watch-form-layout">
+  <div><header class="page-heading"><span class="kicker">Community-led · Police reviewed</span><h1>Propose a Neighborhood Watch group</h1><p>Define the community area accurately. The group remains private until an authorised police reviewer approves it.</p></header>
+    <div class="form-card"><form method="post">{% csrf_token %}{% include 'includes/form_fields.html' %}<div class="location-actions"><button class="button button-light" type="button" id="watch-locate">Use my current location</button><span id="watch-location-status" aria-live="polite">You may also enter the coordinates manually.</span></div><button class="button button-primary button-full" type="submit">Submit for police review</button></form></div>
+  </div>
+  <aside class="watch-policy"><strong>What police review</strong><ol><li>The proposed area and coverage boundary</li><li>The coordinator’s account and group purpose</li><li>Whether a participating police unit should supervise the group</li></ol><hr><strong>Privacy boundary</strong><p>The public map never displays a member list, private messages, unverified allegations or evidence.</p></aside>
+</section>
+{% endblock %}
+{% block scripts %}<script>document.getElementById('watch-locate').addEventListener('click',function(){const s=document.getElementById('watch-location-status');if(!navigator.geolocation){s.textContent='Location is not supported by this device.';return}s.textContent='Finding your location…';navigator.geolocation.getCurrentPosition(p=>{document.getElementById('id_centre_latitude').value=p.coords.latitude.toFixed(6);document.getElementById('id_centre_longitude').value=p.coords.longitude.toFixed(6);s.textContent='Group centre captured.'},()=>s.textContent='Location permission was not granted. Enter coordinates manually.',{enableHighAccuracy:true,timeout:10000})});</script>{% endblock %}

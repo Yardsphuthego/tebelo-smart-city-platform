@@ -1,0 +1,119 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="TEBELO city safety and public service platform">
+  <title>{% block title %}TEBELO{% endblock %}</title>
+  <link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
+  <script src="{% static 'js/theme.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  {% block head %}{% endblock %}
+</head>
+<body class="public-site">
+  <header class="public-header">
+    <div class="public-utilitybar">
+      <div class="public-container">
+        <nav class="audience-nav" aria-label="Audience navigation">
+          <a class="active" href="{% url 'home' %}">Residents</a>
+          <a href="{% url 'city_map' %}">Visitors</a>
+          <a href="{% url 'login' %}">City authorities</a>
+        </nav>
+        <nav class="utility-nav" aria-label="Help and emergency navigation">
+          <a href="{% url 'alerts' %}">City status</a>
+          <a href="{% url 'service_desks' %}">Help & support</a>
+          <a class="utility-emergency" href="tel:999">Emergency: 999</a>
+        </nav>
+      </div>
+    </div>
+    <div class="public-mainbar public-container">
+      <a class="public-brand" href="{% url 'home' %}" aria-label="TEBELO Digital Gaborone home">
+        <span class="brand-mark">T</span>
+        <span><strong>TEBELO</strong><small>Digital Gaborone</small></span>
+      </a>
+      <button class="public-menu-toggle" type="button" data-public-menu-toggle aria-expanded="false" aria-controls="public-navigation">
+        <span></span><span></span><span></span><b>Menu</b>
+      </button>
+      <nav class="public-primary-nav" id="public-navigation" data-public-navigation aria-label="Primary navigation">
+        <details class="public-nav-dropdown">
+          <summary>City services <i></i></summary>
+          <div class="public-dropdown-panel">
+            <span>Access city services</span>
+            <a href="{% url 'report_incident' %}"><strong>Report an incident</strong><small>Send a safety or service report</small></a>
+            <a href="{% url 'service_desks' %}?desk=police"><strong>Virtual Police Station</strong><small>Non-emergency police access</small></a>
+            <a href="{% url 'service_desks' %}?desk=government"><strong>Government assistance</strong><small>Information, guidance and referrals</small></a>
+            <a href="{% url 'watch_groups' %}"><strong>Neighborhood Watch</strong><small>Find or propose an area group</small></a>
+            <a href="{% url 'my_reports' %}"><strong>Track my reports</strong><small>Follow response progress</small></a>
+          </div>
+        </details>
+        <details class="public-nav-dropdown">
+          <summary>Safety & alerts <i></i></summary>
+          <div class="public-dropdown-panel">
+            <span>Verified public information</span>
+            <a href="{% url 'alerts' %}"><strong>Current city alerts</strong><small>Official warnings and notices</small></a>
+            <a href="{% url 'around_me' %}"><strong>Around me</strong><small>Recent activity near your location</small></a>
+            <a href="{% url 'watch_groups' %}"><strong>Neighborhood Watch</strong><small>Police-reviewed community groups</small></a>
+            <a href="{% url 'emergency' %}"><strong>Emergency guidance</strong><small>What to do in immediate danger</small></a>
+          </div>
+        </details>
+        <a class="public-nav-link" href="{% url 'city_map' %}">Explore Gaborone</a>
+        <a class="public-nav-link" href="{% url 'alerts' %}">City status</a>
+        <details class="public-nav-dropdown theme-dropdown">
+          <summary><span class="account-label"><span class="theme-symbol">◐</span><span data-theme-label>System</span></span><i></i></summary>
+          <div class="public-dropdown-panel theme-panel">
+            <span>Appearance</span>
+            <button type="button" data-theme-option="light"><strong>Light</strong><small>Bright civic workspace</small></button>
+            <button type="button" data-theme-option="dark"><strong>Dark</strong><small>Low-light information terminal</small></button>
+            <button type="button" data-theme-option="system"><strong>System</strong><small>Match this device</small></button>
+          </div>
+        </details>
+        <details class="public-nav-dropdown account-dropdown">
+          <summary><span class="account-label"><span class="account-symbol">◯</span>{% if user.is_authenticated %}{{ user.first_name|default:'My account' }}{% else %}My account{% endif %}</span><i></i></summary>
+          <div class="public-dropdown-panel account-panel">
+            {% if user.is_authenticated %}
+              <span>Signed in as {{ user.phone_number|default:user.email }}</span>
+              <a href="{% url 'dashboard' %}"><strong>Open dashboard</strong><small>Your TEBELO workspace</small></a>
+              <a href="{% url 'profile' %}"><strong>Account settings</strong><small>Profile and alert preferences</small></a>
+              <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="public-signout" type="submit">Sign out</button></form>
+            {% else %}
+              <span>Resident and authority access</span>
+              <a href="{% url 'login' %}"><strong>Sign in</strong><small>Use your phone number</small></a>
+              <a href="{% url 'register' %}"><strong>Create resident account</strong><small>Join with a Botswana phone number</small></a>
+            {% endif %}
+          </div>
+        </details>
+        <a class="button button-primary public-nav-cta" href="{% url 'report_incident' %}">Report an issue</a>
+      </nav>
+    </div>
+    <section class="city-information-strip" aria-label="Current city information">
+      <span class="ticker-label">City updates</span>
+      <p class="ticker-accessible">Browse verified Gaborone city information. Residents can sign in using a Botswana phone number. For immediate danger, call 999.</p>
+      <div class="ticker-viewport" aria-hidden="true">
+        <div class="ticker-track">
+          {% for copy in '12' %}<div class="ticker-group">
+            {% for alert in ticker_alerts %}<span><b>{{ alert.title }}</b> {{ alert.summary|truncatechars:100 }}</span>{% empty %}<span><b>Gaborone city services</b> Browse verified public information and service updates</span>{% endfor %}
+            <span><b>Digital resident access</b> Sign in securely using your +267 phone number</span>
+            <span><b>Public safety</b> View current alerts and verified incidents on the city map</span>
+            <span><b>Emergency</b> For immediate danger, call 999</span>
+          </div>{% endfor %}
+        </div>
+      </div>
+    </section>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer class="public-footer">
+    <div class="public-container public-footer-main">
+      <div class="public-footer-brand"><a href="{% url 'home' %}"><span class="brand-mark">T</span><span><strong>TEBELO</strong><small>Digital Gaborone</small></span></a><p>Connected city safety and public services.</p></div>
+      <div class="public-footer-emergency"><span>Immediate danger</span><strong>Call emergency services</strong><a href="tel:999">999</a></div>
+      <nav class="public-footer-links" aria-label="Footer navigation"><div><strong>City information</strong><a href="{% url 'city_map' %}">Public city map</a><a href="{% url 'alerts' %}">Current alerts</a><a href="{% url 'around_me' %}">Around me</a></div><div><strong>Resident services</strong><a href="{% url 'watch_groups' %}">Neighborhood Watch</a><a href="{% url 'service_desks' %}">Virtual services</a><a href="{% url 'login' %}">Account access</a></div></nav>
+    </div>
+    <div class="public-footer-bottom"><div class="public-container"><span>© {% now 'Y' %} TEBELO · Gaborone, Botswana</span><span>Public information protects identities and sensitive evidence.</span></div></div>
+  </footer>
+  <script src="{% static 'js/public-nav.js' %}" defer></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

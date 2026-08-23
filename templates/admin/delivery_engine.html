@@ -1,0 +1,53 @@
+{% extends "admin/base.html" %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block title %}Service delivery | TEBELO Command{% endblock %}
+
+{% block content %}
+<main class="ops-dashboard admin-engine">
+  <header class="ops-heading">
+    <div>
+      <p class="ops-eyebrow"><i></i> Service delivery · Live</p>
+      <h1>Delivery command</h1>
+      <p>One accountable queue for incidents, virtual services, deadlines and authority ownership.</p>
+    </div>
+    <div class="ops-actions">
+      <a href="{% url 'admin:operations_serviceroutingpolicy_changelist' %}" class="ops-button secondary"><span class="material-symbols-outlined">route</span>Routing</a>
+      <a href="{% url 'admin:operations_dutyshift_changelist' %}" class="ops-button secondary"><span class="material-symbols-outlined">schedule</span>Duty coverage</a>
+      <a href="{% url 'admin:operations_deliverycase_changelist' %}" class="ops-button"><span class="material-symbols-outlined">database</span>All records</a>
+    </div>
+  </header>
+
+  <section class="ops-kpis">
+    <article><span class="kpi-icon navy material-symbols-outlined">inbox</span><div><small>Open cases</small><strong>{{ metrics.open }}</strong><p>Across all service channels</p></div></article>
+    <article class="{% if metrics.unacknowledged_overdue %}is-critical{% endif %}"><span class="kpi-icon red material-symbols-outlined">timer_off</span><div><small>Acknowledgement overdue</small><strong>{{ metrics.unacknowledged_overdue }}</strong><p>Requires command attention</p></div></article>
+    <article class="{% if metrics.resolution_overdue %}is-critical{% endif %}"><span class="kpi-icon amber material-symbols-outlined">running_with_errors</span><div><small>Resolution overdue</small><strong>{{ metrics.resolution_overdue }}</strong><p>Past committed service time</p></div></article>
+    <article><span class="kpi-icon blue material-symbols-outlined">escalator_warning</span><div><small>Escalated</small><strong>{{ metrics.escalated }}</strong><p>{{ metrics.unassigned }} without authority routing</p></div></article>
+  </section>
+
+  {% if notifications %}
+  <section class="ops-panel admin-notifications">
+    <header><div><span class="material-symbols-outlined">notifications_active</span><div><h2>Command notifications</h2><p>{{ notifications|length }} unread operational update{{ notifications|length|pluralize }}</p></div></div></header>
+    <div class="notification-list">{% for item in notifications %}<article><span class="material-symbols-outlined">priority_high</span><div><small>{{ item.get_kind_display }}</small><strong>{{ item.title }}</strong><p>{{ item.body }}</p></div><form method="post" action="{% url 'notification_read' item.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'admin_delivery_engine' %}"><button>Mark read</button></form></article>{% endfor %}</div>
+  </section>
+  {% endif %}
+
+  <section class="ops-panel engine-queue-admin">
+    <header><div><span class="material-symbols-outlined">assignment</span><div><h2>Unified operational queue</h2><p>Ordered by the next service deadline</p></div></div><span>{{ metrics.open }} open</span></header>
+    <div class="ops-table-wrap"><table class="ops-table engine-table"><thead><tr><th>Case</th><th>Service</th><th>Authority</th><th>Owner</th><th>Next commitment</th><th>Stage</th><th></th></tr></thead><tbody>
+      {% for case in queue %}<tr class="{% if not case.acknowledged_at and case.acknowledgement_due_at < now %}deadline-breached{% elif case.resolution_due_at < now %}deadline-breached{% endif %}"><td><a href="{% url 'admin_delivery_case_detail' case.pk %}">{{ case.reference }}</a><small>{% if case.incident_id %}Incident report{% else %}Virtual service{% endif %}</small></td><td><strong>{{ case.subject|truncatechars:52 }}</strong></td><td>{{ case.organisation.short_name|default:'Central routing' }}</td><td>{{ case.assigned_to|default:'Unassigned' }}</td><td>{% if not case.acknowledged_at %}<strong>Acknowledge</strong><small>{{ case.acknowledgement_due_at|timeuntil }}</small>{% elif not case.assigned_to_id %}<strong>Assign</strong><small>{{ case.assignment_due_at|timeuntil }}</small>{% else %}<strong>Resolve</strong><small>{{ case.resolution_due_at|timeuntil }}</small>{% endif %}</td><td><span class="ops-stage {{ case.stage }}">{{ case.get_stage_display }}</span>{% if case.escalation_level %}<small>Level {{ case.escalation_level }}</small>{% endif %}</td><td><a class="row-action" href="{% url 'admin_delivery_case_detail' case.pk %}"><span class="material-symbols-outlined">arrow_forward</span></a></td></tr>
+      {% empty %}<tr><td colspan="7"><div class="ops-empty"><span class="material-symbols-outlined">task_alt</span><strong>Delivery queue clear</strong><p>New incident and virtual-service cases appear here automatically.</p></div></td></tr>{% endfor %}
+    </tbody></table></div>
+  </section>
+
+  <div class="engine-support-grid">
+    <section class="ops-panel"><header><div><span class="material-symbols-outlined">schedule</span><div><h2>Active duty coverage</h2><p>Responders available now</p></div></div><a href="{% url 'admin:operations_dutyshift_changelist' %}">Manage shifts</a></header><div class="admin-shift-list">{% for shift in shifts %}<article><span class="authority-mark">{{ shift.organisation.short_name|slice:':2' }}</span><div><strong>{{ shift.organisation.short_name }}</strong><p>{{ shift.name }}</p></div><b>{{ shift.assignments.count }}<small>on duty</small></b><time>Until {{ shift.ends_at|date:'H:i' }}</time></article>{% empty %}<div class="ops-empty compact"><span class="material-symbols-outlined">person_off</span><strong>No active duty shifts</strong><p>Cases remain in authority queues until accepted.</p></div>{% endfor %}</div></section>
+    <section class="ops-panel"><header><div><span class="material-symbols-outlined">move_up</span><div><h2>Pending handoffs</h2><p>Cross-authority ownership requests</p></div></div><span>{{ handoffs|length }} pending</span></header><div class="admin-handoff-list">{% for handoff in handoffs %}<article><div><strong>{{ handoff.case.reference }}</strong><small>{{ handoff.from_organisation.short_name|default:'Central' }} → {{ handoff.to_organisation.short_name }}</small><p>{{ handoff.reason|truncatechars:110 }}</p></div><form method="post" action="{% url 'delivery_handoff_response' handoff.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'admin_delivery_engine' %}"><button name="decision" value="accept">Accept</button><button class="secondary" name="decision" value="decline">Decline</button></form></article>{% empty %}<div class="ops-empty compact"><span class="material-symbols-outlined">swap_horiz</span><strong>No pending handoffs</strong></div>{% endfor %}</div></section>
+  </div>
+
+  <section class="ops-panel admin-recommendations">
+    <header><div><span class="material-symbols-outlined">recommend</span><div><h2>Implementation priorities</h2><p>Smart-city and smart-town recommendations with human approval</p></div></div><a href="{% url 'admin:operations_operationalrecommendation_changelist' %}">Recommendation register</a></header>
+    <div class="admin-recommendation-grid">{% for recommendation in recommendations %}<article class="{{ recommendation.priority }}"><header><span>{{ recommendation.category|title }}</span><b>{{ recommendation.get_priority_display }}</b></header><h3>{{ recommendation.title }}</h3><p>{{ recommendation.summary }}</p><footer>{% if recommendation.source_url %}<a href="{{ recommendation.source_url }}">Evidence source</a>{% else %}<span>TEBELO operational evidence</span>{% endif %}<form method="post" action="{% url 'recommendation_action' recommendation.pk %}">{% csrf_token %}<input type="hidden" name="next" value="{% url 'admin_delivery_engine' %}"><select name="status" aria-label="Recommendation status"><option value="proposed" {% if recommendation.status == 'proposed' %}selected{% endif %}>Proposed</option><option value="accepted" {% if recommendation.status == 'accepted' %}selected{% endif %}>Accepted</option><option value="implemented" {% if recommendation.status == 'implemented' %}selected{% endif %}>Implemented</option><option value="dismissed">Dismissed</option></select><button>Save</button></form></footer></article>{% empty %}<div class="ops-empty"><strong>No recommendations require review</strong></div>{% endfor %}</div>
+  </section>
+</main>
+{% endblock %}

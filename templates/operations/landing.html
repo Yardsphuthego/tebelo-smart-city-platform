@@ -1,0 +1,70 @@
+{% extends 'public_base.html' %}
+{% block title %}TEBELO — Connected city safety and services{% endblock %}
+{% block content %}
+<section class="public-hero public-hero-visual" role="img" aria-label="Aerial view of Gaborone"></section>
+
+<section class="city-terminal">
+  <div class="public-container">
+    <div class="city-data-rail" aria-label="Current Gaborone public activity">
+      <div class="city-data-context"><span>Gaborone</span><strong>{{ city_status }}</strong><small>Updated {{ updated_at|date:'H:i' }} CAT</small></div>
+      <a href="{% url 'city_map' %}"><span>Active public</span><strong>{{ city_metrics.active }}</strong><small>Open incidents</small></a>
+      <a href="{% url 'city_map' %}"><span>Safety</span><strong>{{ city_metrics.safety }}</strong><small>Verified reports</small></a>
+      <a href="{% url 'city_map' %}"><span>Traffic</span><strong>{{ city_metrics.traffic }}</strong><small>Road incidents</small></a>
+      <a href="{% url 'city_map' %}"><span>City services</span><strong>{{ city_metrics.services }}</strong><small>Utilities & roads</small></a>
+      <a href="{% url 'alerts' %}"><span>Public alerts</span><strong>{{ alerts|length }}</strong><small>Current notices</small></a>
+    </div>
+
+    <div class="city-terminal-layout">
+      <main class="terminal-module service-directory-module">
+        <header class="terminal-module-heading"><div><span>Resident services</span><h2>City service directory</h2></div><small>Secure digital access</small></header>
+        <a class="featured-service-row" href="{% url 'report_incident' %}">
+          <span class="service-code">01</span>
+          <div><small>Primary service</small><h3>Report an incident</h3><p>Submit a location, description and supporting evidence for routing to the responsible authority.</p></div>
+          <strong>Start report <i>→</i></strong>
+        </a>
+        <div class="service-table" role="list">
+          <a href="{% url 'my_reports' %}" role="listitem"><span class="service-code">02</span><div><strong>Track responses</strong><small>Verification, assignment and resolution history</small></div><b>Account</b><i>→</i></a>
+          <a href="{% url 'around_me' %}" role="listitem"><span class="service-code">03</span><div><strong>Around me</strong><small>Verified public activity near your location</small></div><b>Public</b><i>→</i></a>
+          <a href="{% url 'service_desks' %}?desk=police" role="listitem"><span class="service-code">04</span><div><strong>Virtual Police Station</strong><small>Non-emergency police access beyond the physical station</small></div><b>Account</b><i>→</i></a>
+          <a href="{% url 'service_desks' %}?desk=government" role="listitem"><span class="service-code">05</span><div><strong>Government Virtual Assistance</strong><small>Service information, application guidance and referrals</small></div><b>Account</b><i>→</i></a>
+          <a href="{% url 'watch_groups' %}" role="listitem"><span class="service-code">06</span><div><strong>Neighborhood Watch</strong><small>Find or propose a police-reviewed community group</small></div><b>Public</b><i>→</i></a>
+          <a href="{% url 'city_map' %}" role="listitem"><span class="service-code">07</span><div><strong>Public city map</strong><small>Verified incidents and Watch coverage</small></div><b>Public</b><i>→</i></a>
+        </div>
+      </main>
+
+      <aside class="terminal-sidebar">
+        <section class="terminal-module city-notices-module">
+          <header class="terminal-module-heading"><div><span>Official information</span><h2>Current notices</h2></div><a href="{% url 'alerts' %}">View all</a></header>
+          <div class="notice-feed">
+            {% for alert in alerts %}<a href="{% url 'alerts' %}"><span class="notice-severity {{ alert.severity }}"></span><div><strong>{{ alert.title }}</strong><small>{{ alert.summary|truncatechars:90 }}</small><time>{{ alert.starts_at|timesince }} ago</time></div></a>{% empty %}<div class="terminal-empty"><strong>No active city alerts</strong><p>No authorised public warnings are currently in effect.</p></div>{% endfor %}
+          </div>
+        </section>
+
+        <section class="terminal-module routing-module">
+          <header class="terminal-module-heading"><div><span>Routing directory</span><h2>Service domains</h2></div></header>
+          <div class="routing-table">
+            <div><span>Police</span><strong>Safety reports</strong></div>
+            <div><span>Traffic services</span><strong>Road incidents</strong></div>
+            <div><span>Fire & rescue</span><strong>Emergency response</strong></div>
+            <div><span>City authorities</span><strong>Public services</strong></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="terminal-governance">
+      <header><span>Platform controls</span><h2>Public trust framework</h2><p>How TEBELO separates public information from protected operational data.</p></header>
+      <div class="governance-ledger">
+        <article><span>01</span><div><strong>Role-restricted records</strong><p>Sensitive evidence and personal information remain available only to authorised users.</p></div><b>Access control</b></article>
+        <article><span>02</span><div><strong>Auditable workflows</strong><p>Important access, assignment and incident changes are recorded in a traceable history.</p></div><b>Governance</b></article>
+        <article><span>03</span><div><strong>Public-safe publishing</strong><p>Maps display verified summaries—not private evidence or unverified accusations.</p></div><b>Data protection</b></article>
+      </div>
+    </section>
+
+    <div class="terminal-account-bar">
+      <div><strong>TEBELO resident access</strong><span>Use your Botswana phone number to access personal services.</span></div>
+      {% if user.is_authenticated %}<a href="{% url 'dashboard' %}">Open my dashboard <span>→</span></a>{% else %}<div class="terminal-account-actions"><a href="{% url 'login' %}">Sign in</a><a href="{% url 'register' %}">Create account</a></div>{% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}
