@@ -471,6 +471,7 @@ class PageTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Gaborone Command")
         self.assertContains(response, "overview-page-heading")
+        self.assertContains(response, "overview-subtitle-strip")
         self.assertContains(response, "Active incident queue")
         self.assertContains(response, "admin-civic-strip")
         self.assertContains(response, "admin-ticker-track")
