@@ -1,0 +1,94 @@
+/* Professional interaction feedback and reliable public-navigation stacking. */
+.public-header {
+  isolation: isolate;
+  overflow: visible;
+  z-index: 1000;
+}
+.public-header > .public-mainbar {
+  overflow: visible;
+  position: relative;
+  z-index: 20;
+}
+.public-nav-dropdown[open] { z-index: 80; }
+.public-dropdown-panel {
+  animation: tebelo-menu-enter 150ms cubic-bezier(.2,.8,.2,1) both;
+  transform-origin: top;
+  z-index: 100;
+}
+.public-nav-dropdown > summary,
+.public-primary-nav > .public-nav-link,
+.public-dropdown-panel > a,
+.theme-panel button,
+.button,
+.workspace-primary-nav > a,
+.workspace-service-nav > a,
+.admin-platform-nav > a {
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease, opacity 140ms ease, transform 140ms ease;
+}
+.public-nav-dropdown > summary:active,
+.public-primary-nav > .public-nav-link:active,
+.public-dropdown-panel > a:active,
+.theme-panel button:active,
+.button:active,
+.workspace-primary-nav > a:active,
+.workspace-service-nav > a:active,
+.admin-platform-nav > a:active {
+  transform: scale(.975);
+}
+.public-nav-dropdown > summary:focus-visible,
+.public-primary-nav a:focus-visible,
+.public-dropdown-panel button:focus-visible,
+.button:focus-visible,
+.workspace-header a:focus-visible,
+.workspace-header button:focus-visible {
+  outline: 2px solid #7088a6;
+  outline-offset: 3px;
+}
+body.public-dropdown-active::after {
+  background: rgba(0, 20, 47, .18);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 800;
+}
+@keyframes tebelo-menu-enter {
+  from { opacity: 0; transform: translateY(-7px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (hover: hover) {
+  .city-data-rail > a,
+  .service-table > a,
+  .notice-feed > a,
+  .city-service-card,
+  .watch-card,
+  .nearby-list > a {
+    transition: background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+  .city-data-rail > a:hover,
+  .service-table > a:hover,
+  .notice-feed > a:hover,
+  .nearby-list > a:hover { background: rgba(112, 136, 166, .1); }
+  .city-service-card:hover,
+  .watch-card:hover { box-shadow: 0 14px 32px rgba(0, 20, 47, .1); transform: translateY(-2px); }
+}
+@media (min-width: 981px) {
+  .public-header .public-primary-nav { overflow: visible; position: relative; z-index: 30; }
+}
+@media (max-width: 980px) {
+  body.public-dropdown-active::after { display: none; }
+  .public-header .public-primary-nav { z-index: 100; }
+  .public-dropdown-panel { animation: tebelo-mobile-menu-enter 140ms ease both; }
+  @keyframes tebelo-mobile-menu-enter {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-dropdown-panel { animation: none; }
+  .public-nav-dropdown > summary,
+  .public-primary-nav > .public-nav-link,
+  .public-dropdown-panel > a,
+  .theme-panel button,
+  .button { transition: none; }
+}

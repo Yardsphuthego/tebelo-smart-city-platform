@@ -408,6 +408,7 @@ class PageTests(TestCase):
                 response = self.client.get(reverse(name))
                 self.assertEqual(response.status_code, 200)
                 self.assertContains(response, "public-header")
+                self.assertContains(response, "css/interactions.css")
                 self.assertContains(response, "js/theme.js")
                 self.assertContains(response, "js/loading.js")
                 self.assertNotContains(response, "app-sidebar")
