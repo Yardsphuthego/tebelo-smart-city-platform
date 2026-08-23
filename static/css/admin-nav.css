@@ -12,6 +12,8 @@
 .admin-platform-nav a:hover { background: #e8edf3; }
 .admin-platform-nav a.is-active { background: #e8edf3; color: #011f4b; font-weight: 800; }
 .admin-platform-nav a.is-active::after { animation: admin-nav-underline 180ms ease-out both; background: #011f4b; bottom: 0; content: ""; height: 3px; left: 12px; position: absolute; right: 12px; transform-origin: left; }
+.admin-platform-nav a:first-child.is-active { background: #011f4b; color: #fff; }
+.admin-platform-nav a:first-child.is-active::after { background: #7088a6; }
 @keyframes admin-nav-underline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .admin-platform-nav i { background: #b8c3cf; flex: 0 0 auto; height: 20px; margin: 0 8px; width: 1px; }
 .admin-account-panel { min-width: 310px; }
@@ -23,5 +25,6 @@
 .dark .admin-platform-nav a:hover { background: #223147; }
 .dark .admin-platform-nav a.is-active { background: #223147; color: #fff; }
 .dark .admin-platform-nav a.is-active::after { background: #9db4d1; }
+.dark .admin-platform-nav a:first-child.is-active { background: #011f4b; }
 @media (prefers-reduced-motion: reduce) { .admin-ticker-track,.admin-platform-nav a.is-active::after { animation: none; } .admin-ticker-group:nth-child(2) { display: none; } }
 @media (max-width: 800px) { .admin-platform-nav { padding-inline: 8px; } .admin-platform-nav a { padding-inline: 11px; } .admin-civic-strip > a { display: none; } }
