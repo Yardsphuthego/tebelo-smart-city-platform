@@ -11,7 +11,8 @@
 }
 .public-utilitybar { background: #00142f; }
 .public-utilitybar .audience-nav .active { background: #7088a6; }
-.public-header nav > a:not(.button),.public-nav-dropdown > summary { color: #10233d; }
+.public-mainbar nav > a:not(.button),.public-nav-dropdown > summary { color: #10233d; }
+.public-header .public-utilitybar nav > a { color: #fff; }
 .public-dropdown-panel { box-shadow: 0 18px 40px rgba(0, 20, 47, .16); }
 .public-dropdown-panel > a:hover,.theme-panel button:hover { background: #f0f3f7; }
 .public-eyebrow i,.status-indicator,.map-summary i { background: #7088a6; box-shadow: 0 0 0 4px #e5eaf0; }
