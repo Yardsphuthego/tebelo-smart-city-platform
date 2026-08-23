@@ -66,6 +66,20 @@
     document.querySelectorAll('.admin-account-menu[open]').forEach((menu) => menu.removeAttribute('open'));
   });
 
+  document.addEventListener('DOMContentLoaded', () => {
+    const activeAdminNavigation = document.querySelector('.admin-platform-nav .is-active');
+    if (!activeAdminNavigation) return;
+    const navigation = activeAdminNavigation.closest('.admin-platform-nav');
+    const itemBounds = activeAdminNavigation.getBoundingClientRect();
+    const navigationBounds = navigation.getBoundingClientRect();
+    if (itemBounds.left >= navigationBounds.left && itemBounds.right <= navigationBounds.right) return;
+    activeAdminNavigation.scrollIntoView({
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'center',
+    });
+  });
+
   window.addEventListener('pageshow', hide);
   window.addEventListener('pagehide', () => show(0));
   window.TebeloLoading = { show, hide };

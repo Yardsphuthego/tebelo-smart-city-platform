@@ -8,10 +8,11 @@
 .admin-ticker-group b { color: #d6e1ec; margin-right: 5px; }
 @keyframes admin-city-ticker { to { transform: translateX(-50%); } }
 .admin-platform-nav { align-items: center; background: #f4f6f9; border-bottom: 1px solid var(--ops-line); display: flex; min-height: 44px; overflow-x: auto; padding: 0 16px; scrollbar-width: thin; white-space: nowrap; }
-.admin-platform-nav a { align-items: center; border-right: 1px solid #dfe5ec; color: var(--ops-ink); display: flex; font-size: 10px; font-weight: 650; min-height: 44px; padding: 0 14px; }
-.admin-platform-nav a:first-child { background: #011f4b; color: #fff; }
+.admin-platform-nav a { align-items: center; border-right: 1px solid #dfe5ec; color: var(--ops-ink); display: flex; font-size: 10px; font-weight: 650; min-height: 44px; padding: 0 14px; position: relative; }
 .admin-platform-nav a:hover { background: #e8edf3; }
-.admin-platform-nav a:first-child:hover { background: #0b3263; }
+.admin-platform-nav a.is-active { background: #e8edf3; color: #011f4b; font-weight: 800; }
+.admin-platform-nav a.is-active::after { animation: admin-nav-underline 180ms ease-out both; background: #011f4b; bottom: 0; content: ""; height: 3px; left: 12px; position: absolute; right: 12px; transform-origin: left; }
+@keyframes admin-nav-underline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .admin-platform-nav i { background: #b8c3cf; flex: 0 0 auto; height: 20px; margin: 0 8px; width: 1px; }
 .admin-account-panel { min-width: 310px; }
 .admin-account-avatar { overflow: hidden; }
@@ -20,5 +21,7 @@
 .dark .admin-platform-nav { background: #162131; border-color: #334155; }
 .dark .admin-platform-nav a { border-color: #334155; color: #e6edf5; }
 .dark .admin-platform-nav a:hover { background: #223147; }
-@media (prefers-reduced-motion: reduce) { .admin-ticker-track { animation: none; } .admin-ticker-group:nth-child(2) { display: none; } }
+.dark .admin-platform-nav a.is-active { background: #223147; color: #fff; }
+.dark .admin-platform-nav a.is-active::after { background: #9db4d1; }
+@media (prefers-reduced-motion: reduce) { .admin-ticker-track,.admin-platform-nav a.is-active::after { animation: none; } .admin-ticker-group:nth-child(2) { display: none; } }
 @media (max-width: 800px) { .admin-platform-nav { padding-inline: 8px; } .admin-platform-nav a { padding-inline: 11px; } .admin-civic-strip > a { display: none; } }

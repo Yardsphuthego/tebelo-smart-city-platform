@@ -473,6 +473,7 @@ class PageTests(TestCase):
         self.assertContains(response, "admin-ticker-track")
         self.assertContains(response, "admin-platform-nav")
         self.assertContains(response, "admin-account-menu")
+        self.assertContains(response, 'class="is-active" aria-current="page">Overview</a>')
         account_panel = response.content.decode().split('class="admin-account-panel"', 1)[1].split("</details>", 1)[0]
         self.assertIn("Security settings", account_panel)
         self.assertNotIn("Service delivery", account_panel)
@@ -480,6 +481,9 @@ class PageTests(TestCase):
         self.assertNotContains(response, 'id="nav-sidebar"')
         self.assertContains(response, "js/loading.js")
         self.assertIn("'unsafe-eval'", response.headers["Content-Security-Policy"])
+
+        incidents = self.client.get(reverse("admin:operations_incident_changelist"))
+        self.assertContains(incidents, 'class="is-active" aria-current="page">Incidents</a>')
 
     def test_delivery_engine_and_case_use_native_super_admin_layout(self):
         admin_user = User.objects.create_superuser(

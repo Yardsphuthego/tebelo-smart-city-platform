@@ -4,5 +4,21 @@
   <div class="bg-white border-b border-base-200 px-4 z-40 dark:bg-base-900 dark:border-base-800 dark:text-font-default-dark {% element_classes 'header' %}">
     <div class="flex items-center h-16 mx-auto max-w-none py-4 {% element_classes 'header_inner' %}"><div id="header-inner" class="flex items-center relative w-full"><div class="flex items-center w-full">{% block usertools %}{% if has_permission %}{% block welcome-msg %}{% include 'unfold/helpers/welcomemsg.html' %}{% endblock %}{% block userlinks %}{% include 'unfold/helpers/userlinks.html' %}{% endblock %}{% endif %}{% endblock %}</div></div></div>
   </div>
-  {% if has_permission %}<nav class="admin-platform-nav" aria-label="Administration navigation"><a href="{% url 'admin:index' %}">Overview</a><a href="{% url 'admin_delivery_engine' %}">Service delivery</a><a href="{% url 'admin:operations_incident_changelist' %}">Incidents</a><a href="{% url 'admin:operations_servicedeskcase_changelist' %}">Virtual services</a><a href="{% url 'admin:operations_neighborhoodwatchgroup_changelist' %}">Neighborhood Watch</a><a href="{% url 'admin:operations_alert_changelist' %}">Public alerts</a><i></i><a href="{% url 'admin:operations_organisation_changelist' %}">Organisations</a><a href="{% url 'admin:operations_serviceroutingpolicy_changelist' %}">Routing</a><a href="{% url 'admin:operations_dutyshift_changelist' %}">Duty shifts</a><a href="{% url 'admin:accounts_user_changelist' %}">Users & access</a><a href="{% url 'admin:operations_operationalrecommendation_changelist' %}">Governance</a><a href="{% url 'home' %}">Resident platform</a></nav>{% endif %}
+  {% if has_permission %}{% with current=request.resolver_match.url_name %}
+  <nav class="admin-platform-nav" aria-label="Administration navigation">
+    <a href="{% url 'admin:index' %}"{% if current == 'index' %} class="is-active" aria-current="page"{% endif %}>Overview</a>
+    <a href="{% url 'admin_delivery_engine' %}"{% if 'delivery' in current %} class="is-active" aria-current="page"{% endif %}>Service delivery</a>
+    <a href="{% url 'admin:operations_incident_changelist' %}"{% if 'operations_incident' in current %} class="is-active" aria-current="page"{% endif %}>Incidents</a>
+    <a href="{% url 'admin:operations_servicedeskcase_changelist' %}"{% if 'operations_servicedeskcase' in current %} class="is-active" aria-current="page"{% endif %}>Virtual services</a>
+    <a href="{% url 'admin:operations_neighborhoodwatchgroup_changelist' %}"{% if 'operations_neighborhoodwatchgroup' in current %} class="is-active" aria-current="page"{% endif %}>Neighborhood Watch</a>
+    <a href="{% url 'admin:operations_alert_changelist' %}"{% if 'operations_alert' in current %} class="is-active" aria-current="page"{% endif %}>Public alerts</a>
+    <i></i>
+    <a href="{% url 'admin:operations_organisation_changelist' %}"{% if 'operations_organisation' in current %} class="is-active" aria-current="page"{% endif %}>Organisations</a>
+    <a href="{% url 'admin:operations_serviceroutingpolicy_changelist' %}"{% if 'operations_serviceroutingpolicy' in current %} class="is-active" aria-current="page"{% endif %}>Routing</a>
+    <a href="{% url 'admin:operations_dutyshift_changelist' %}"{% if 'operations_dutyshift' in current %} class="is-active" aria-current="page"{% endif %}>Duty shifts</a>
+    <a href="{% url 'admin:accounts_user_changelist' %}"{% if 'accounts_user' in current %} class="is-active" aria-current="page"{% endif %}>Users & access</a>
+    <a href="{% url 'admin:operations_operationalrecommendation_changelist' %}"{% if 'operations_operationalrecommendation' in current %} class="is-active" aria-current="page"{% endif %}>Governance</a>
+    <a href="{% url 'home' %}">Resident platform</a>
+  </nav>
+  {% endwith %}{% endif %}
 </header>
