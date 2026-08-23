@@ -13,14 +13,14 @@
         <i aria-hidden="true"></i>
         <h1>Gaborone Command</h1>
       </div>
-      <div class="ops-actions overview-actions-row">
-        <a href="{{ incident_changelist_url }}" class="ops-button secondary"><span class="material-symbols-outlined">view_list</span>Incident queue</a>
-        <a href="{{ delivery_engine_url }}" class="ops-button secondary"><span class="material-symbols-outlined">acute</span>Service delivery</a>
-        <a href="{{ alert_add_url }}" class="ops-button"><span class="material-symbols-outlined">campaign</span>Issue alert</a>
+      <div class="overview-subtitle-strip">
+        <p>City safety and public-service activity <span>·</span> Updated <time>{{ updated_at|date:"H:i:s" }} CAT</time></p>
       </div>
     </div>
-    <div class="overview-subtitle-strip">
-      <p>City safety and public-service activity <span>·</span> Updated <time>{{ updated_at|date:"H:i:s" }} CAT</time></p>
+    <div class="ops-actions overview-actions-row">
+      <a href="{{ incident_changelist_url }}" class="ops-button secondary"><span class="material-symbols-outlined">view_list</span>Incident queue</a>
+      <a href="{{ delivery_engine_url }}" class="ops-button secondary"><span class="material-symbols-outlined">acute</span>Service delivery</a>
+      <a href="{{ alert_add_url }}" class="ops-button"><span class="material-symbols-outlined">campaign</span>Issue alert</a>
     </div>
   </header>
 
