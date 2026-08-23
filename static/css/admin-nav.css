@@ -14,6 +14,8 @@
 .admin-platform-nav a:first-child:hover { background: #0b3263; }
 .admin-platform-nav i { background: #b8c3cf; flex: 0 0 auto; height: 20px; margin: 0 8px; width: 1px; }
 .admin-account-panel { min-width: 310px; }
+.admin-account-avatar { overflow: hidden; }
+.admin-account-avatar img { display: block; height: 100%; object-fit: cover; width: 100%; }
 .admin-account-panel > footer { justify-content: flex-end; }
 .dark .admin-platform-nav { background: #162131; border-color: #334155; }
 .dark .admin-platform-nav a { border-color: #334155; color: #e6edf5; }

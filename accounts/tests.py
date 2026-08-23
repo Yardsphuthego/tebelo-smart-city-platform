@@ -1,3 +1,7 @@
+import base64
+import tempfile
+
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
@@ -97,3 +101,44 @@ class PhoneAccountTests(TestCase):
         self.assertRedirects(
             self.client.get(reverse("dashboard")), reverse("admin:index")
         )
+
+    def test_super_admin_can_upload_a_profile_photo(self):
+        admin = User.objects.create_superuser(
+            email="photo-admin@tebelo.local", password="A-strong-authority-pass-2026"
+        )
+        image = SimpleUploadedFile(
+            "admin-profile.png",
+            base64.b64decode(
+                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII="
+            ),
+            content_type="image/png",
+        )
+        self.client.force_login(admin)
+
+        with tempfile.TemporaryDirectory() as media_root, self.settings(MEDIA_ROOT=media_root):
+            response = self.client.post(
+                reverse("profile"),
+                {
+                    "first_name": "Platform",
+                    "last_name": "Administrator",
+                    "phone_number": "",
+                    "preferred_radius_km": 3,
+                    "profile_photo": image,
+                },
+            )
+            self.assertRedirects(response, reverse("profile"))
+            admin.refresh_from_db()
+            self.assertTrue(admin.profile_photo.name.endswith("admin-profile.png"))
+            administration = self.client.get(reverse("admin:index"))
+            self.assertContains(administration, admin.profile_photo.url)
+
+    def test_profile_photo_upload_is_restricted_to_super_admins(self):
+        resident = User.objects.create_user(
+            phone_number="+26774445566", password="A-strong-resident-pass-2026"
+        )
+        self.client.force_login(resident)
+
+        response = self.client.get(reverse("profile"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'name="profile_photo"')

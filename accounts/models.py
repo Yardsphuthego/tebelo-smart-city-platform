@@ -1,8 +1,15 @@
 import uuid
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from core.models import TimeStampedModel
 from .phone import normalize_phone_number, validate_phone_number
+
+
+def validate_profile_photo_size(photo):
+    if photo.size > 5 * 1024 * 1024:
+        raise ValidationError("Profile photos must be 5 MB or smaller.")
 
 
 class UserManager(BaseUserManager):
@@ -49,6 +56,15 @@ class User(AbstractUser):
     location_consent = models.BooleanField(default=False)
     nearby_alerts_enabled = models.BooleanField(default=True)
     preferred_radius_km = models.PositiveSmallIntegerField(default=3)
+    profile_photo = models.ImageField(
+        upload_to="profile_photos/%Y/%m/",
+        blank=True,
+        validators=[
+            FileExtensionValidator(allowed_extensions=("jpg", "jpeg", "png", "webp")),
+            validate_profile_photo_size,
+        ],
+        help_text="JPEG, PNG or WebP. Maximum file size: 5 MB.",
+    )
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
     objects = UserManager()

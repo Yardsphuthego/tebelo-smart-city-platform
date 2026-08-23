@@ -1,0 +1,8 @@
+.workspace-avatar,.admin-account-avatar,.account-symbol{overflow:hidden}
+.workspace-avatar img,.admin-account-avatar img,.account-symbol img{display:block;height:100%;object-fit:cover;width:100%}
+.account-symbol img{border-radius:50%;height:22px;width:22px}
+.profile-photo-preview{align-items:center;background:#f3f6f9;border:1px solid #d8e1eb;border-radius:10px;display:flex;gap:14px;margin-bottom:22px;padding:14px}
+.profile-photo-preview img{border-radius:50%;height:72px;object-fit:cover;width:72px}
+.profile-photo-preview strong,.profile-photo-preview small{display:block}
+.profile-photo-preview strong{color:#00142f;font-size:12px}.profile-photo-preview small{color:#60738a;font-size:10px;margin-top:4px}
+html[data-theme=dark] .profile-photo-preview{background:#162131;border-color:#314052}html[data-theme=dark] .profile-photo-preview strong{color:#eef3f8}

@@ -47,9 +47,14 @@ class RegisterForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if not self.instance.is_superuser:
+            self.fields.pop("profile_photo", None)
+
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "phone_number", "location_consent", "nearby_alerts_enabled", "preferred_radius_km")
+        fields = ("profile_photo", "first_name", "last_name", "phone_number", "location_consent", "nearby_alerts_enabled", "preferred_radius_km")
 
     def clean_phone_number(self):
         return normalize_phone_number(self.cleaned_data["phone_number"])

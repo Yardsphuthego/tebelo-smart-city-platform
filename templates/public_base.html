@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
   <script src="{% static 'js/theme.js' %}"></script>
   <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
   {% block head %}{% endblock %}
 </head>
 <body class="public-site">
@@ -79,7 +80,7 @@
           </div>
         </details>
         <details class="public-nav-dropdown account-dropdown">
-          <summary><span class="account-label"><span class="account-symbol">◯</span>{% if user.is_authenticated %}{{ user.first_name|default:'My account' }}{% else %}My account{% endif %}</span><i></i></summary>
+          <summary><span class="account-label"><span class="account-symbol">{% if user.is_authenticated and user.profile_photo %}<img src="{{ user.profile_photo.url }}" alt="">{% else %}◯{% endif %}</span>{% if user.is_authenticated %}{{ user.first_name|default:'My account' }}{% else %}My account{% endif %}</span><i></i></summary>
           <div class="public-dropdown-panel account-panel">
             {% if user.is_authenticated %}
               <span>Signed in as {{ user.phone_number|default:user.email }}</span>

@@ -21,7 +21,7 @@ def register(request):
 
 @login_required
 def profile(request):
-    form = ProfileForm(request.POST or None, instance=request.user)
+    form = ProfileForm(request.POST or None, request.FILES or None, instance=request.user)
     if request.method == "POST" and form.is_valid():
         form.save()
         audit(request=request, action="account.profile_updated", obj=request.user)
