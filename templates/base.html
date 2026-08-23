@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
   <script src="{% static 'js/theme.js' %}"></script>
-  <link rel="stylesheet" href="{% static 'css/app.css' %}">{% block head %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'css/app.css' %}"><link rel="stylesheet" href="{% static 'css/workspace-nav.css' %}">{% block head %}{% endblock %}
 </head>
 <body class="workspace-site {% block body_class %}{% endblock %}">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -18,7 +18,10 @@
         <strong>City operations</strong>
         <div class="civic-strip-viewport"><div class="civic-strip-track">
           {% for copy in '12' %}<div class="civic-strip-group">
-            {% for alert in ticker_alerts %}<span><b>{{ alert.title }}</b> {{ alert.summary|truncatechars:90 }}</span>{% empty %}<span><b>Gaborone</b> City safety and public services are available through TEBELO</span>{% endfor %}
+            {% for alert in ticker_alerts %}<span><b>{{ alert.title }}</b> {{ alert.summary|truncatechars:90 }}</span>{% endfor %}
+            <span><b>City service access</b> Submit and track service requests from one city workspace</span>
+            <span><b>Virtual Police Station</b> Reach non-emergency police assistance from any area</span>
+            <span><b>Neighborhood Watch</b> Join verified local safety groups and share reports with police</span>
             <span><b>Emergency</b> Police 999 · Fire 998 · Ambulance 997</span>
           </div>{% endfor %}
         </div></div>
@@ -27,23 +30,24 @@
       <div class="workspace-topnav">
         <a class="workspace-brand" href="{% url 'home' %}"><span class="brand-mark">T</span><span><strong>TEBELO</strong><small>City operations</small></span></a>
         <button class="workspace-menu-toggle" type="button" data-workspace-menu-toggle aria-expanded="false" aria-controls="workspace-navigation"><span></span><span></span><span></span><b>Menu</b></button>
-        <nav class="workspace-primary-nav" id="workspace-navigation" data-workspace-navigation aria-label="Workspace navigation">
-          <a href="{% url 'dashboard' %}">Overview</a><a href="{% url 'city_map' %}">City map</a><a href="{% url 'alerts' %}">Alerts</a><a href="{% url 'service_desks' %}">Virtual services</a><a href="{% url 'watch_groups' %}">Neighborhood Watch</a>
+        <nav class="workspace-primary-nav" id="workspace-navigation" data-workspace-navigation aria-label="Primary workspace navigation">
+          <a href="{% url 'dashboard' %}">Overview</a><a href="{% url 'around_me' %}">Around me</a><a href="{% url 'city_map' %}">City map</a><a href="{% url 'alerts' %}">City alerts</a>
         </nav>
         <div class="workspace-top-actions">
-          <a class="workspace-report-action" href="{% url 'report_incident' %}">Report issue</a>
           <details class="workspace-account-menu" data-workspace-account>
             <summary><span class="workspace-avatar">{{ user.first_name|first|default:'U' }}{{ user.last_name|first }}</span><span><strong>{{ user.get_full_name|default:user.phone_number|default:user.email }}</strong><small>{{ user.get_role_display }}</small></span><i></i></summary>
             <div class="workspace-account-panel">
               <header><small>Signed in</small><strong>{{ user.phone_number|default:user.email }}</strong></header>
-              <section><span>My workspace</span><a href="{% url 'dashboard' %}"><b>Overview</b><small>Personal city workspace</small></a><a href="{% url 'around_me' %}"><b>Around me</b><small>Nearby verified activity</small></a><a href="{% url 'my_reports' %}"><b>My reports</b><small>Track submitted reports</small></a><a href="{% url 'profile' %}"><b>Account settings</b><small>Profile and alert preferences</small></a></section>
-              <section><span>City services</span><a href="{% url 'report_incident' %}"><b>Report an incident</b><small>Safety or public-service issue</small></a><a href="{% url 'service_desks' %}"><b>Virtual public services</b><small>Police and government assistance</small></a><a href="{% url 'watch_groups' %}"><b>Neighborhood Watch</b><small>Community safety groups</small></a></section>
-              {% if user.is_authority %}<section><span>Authority operations</span><a href="{% url 'delivery_command' %}"><b>Service delivery</b><small>Cases, deadlines and handoffs</small></a><a href="{% url 'command_dashboard' %}"><b>Incident command</b><small>Operational incident queue</small></a>{% if can_manage_watch %}<a href="{% url 'watch_command' %}"><b>Watch oversight</b><small>Police community coordination</small></a>{% endif %}{% if user.is_staff %}<a href="{% url 'admin:index' %}"><b>Platform administration</b><small>System configuration and governance</small></a>{% endif %}</section>{% endif %}
+              <section><span>Profile</span><a href="{% url 'profile' %}"><b>Account settings</b><small>Personal details and alert preferences</small></a></section>
+              <section class="workspace-theme-options"><span>Appearance</span><button type="button" data-theme-option="light">Light</button><button type="button" data-theme-option="dark">Dark</button><button type="button" data-theme-option="system">System</button></section>
               <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button>Sign out</button></form>
             </div>
           </details>
         </div>
       </div>
+      <nav class="workspace-service-nav" data-workspace-navigation aria-label="Services and operations navigation">
+        <a href="{% url 'report_incident' %}"><b>Report issue</b></a><a href="{% url 'my_reports' %}">My reports</a><a href="{% url 'service_desks' %}?desk=police">Virtual Police</a><a href="{% url 'service_desks' %}?desk=government">Government assistance</a><a href="{% url 'watch_groups' %}">Neighborhood Watch</a>{% if user.is_authority %}<span></span><a href="{% url 'delivery_command' %}">Service delivery</a><a href="{% url 'command_dashboard' %}">Incident command</a>{% if can_manage_watch %}<a href="{% url 'watch_command' %}">Watch oversight</a>{% endif %}{% if user.is_staff %}<a href="{% url 'admin:index' %}">Administration</a>{% endif %}{% endif %}
+      </nav>
     </header>
     {% if messages %}<div class="messages" role="status">{% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}</div>{% endif %}
     <main id="main" class="app-main">{% block content %}{% endblock %}</main>

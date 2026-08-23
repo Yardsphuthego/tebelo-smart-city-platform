@@ -125,7 +125,7 @@ UNFOLD = {
     "SHOW_HISTORY": True,
     "SHOW_VIEW_ON_SITE": True,
     "BORDER_RADIUS": "10px",
-    "STYLES": [lambda request: static("css/admin.css")],
+    "STYLES": [lambda request: static("css/admin.css"), lambda request: static("css/admin-nav.css")],
     "SCRIPTS": [lambda request: static("js/loading.js")],
     "COLORS": {
         "primary": {

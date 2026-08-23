@@ -1,0 +1,48 @@
+/* Two visible navigation levels; account menus remain profile-only. */
+.workspace-service-nav {
+  align-items: center;
+  background: #f4f6f9;
+  border-top: 1px solid var(--line);
+  display: flex;
+  min-height: 44px;
+  overflow-x: auto;
+  padding: 0 max(24px, calc((100vw - 1500px) / 2));
+  scrollbar-width: thin;
+  white-space: nowrap;
+}
+.workspace-service-nav > a {
+  align-items: center;
+  border-right: 1px solid #dfe5ec;
+  color: var(--ink);
+  display: flex;
+  font-size: 10px;
+  font-weight: 650;
+  min-height: 44px;
+  padding: 0 16px;
+}
+.workspace-service-nav > a:first-child { background: #011f4b; color: #fff; }
+.workspace-service-nav > a:hover { background: #e8edf3; }
+.workspace-service-nav > a:first-child:hover { background: #0b3263; }
+.workspace-service-nav > span { background: #b8c3cf; flex: 0 0 auto; height: 20px; margin: 0 8px; width: 1px; }
+.workspace-theme-options { display: flex !important; flex-flow: row wrap; gap: 5px; padding: 10px 9px !important; }
+.workspace-theme-options > span { flex: 0 0 100%; padding: 0 0 5px !important; }
+.workspace-theme-options button { background: #f0f3f7; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); cursor: pointer; font-size: 9px; padding: 7px 10px; }
+.workspace-theme-options button[aria-pressed="true"] { background: #011f4b; color: #fff; }
+.workspace-account-panel { min-width: 310px; }
+.workspace-site .app-main { min-height: calc(100vh - 218px); }
+.workspace-site .messages { top: 170px; }
+html[data-theme="dark"] .workspace-service-nav { background: #162131; border-color: #314052; }
+html[data-theme="dark"] .workspace-service-nav > a { border-color: #314052; color: #eef3f8; }
+html[data-theme="dark"] .workspace-service-nav > a:hover { background: #223147; }
+html[data-theme="dark"] .workspace-theme-options button { background: #182536; border-color: #314052; color: #eef3f8; }
+
+@media (max-width: 980px) {
+  .workspace-header .workspace-primary-nav { display: none; }
+  .workspace-service-nav { align-items: stretch; background: #fff; box-shadow: 0 18px 32px rgba(0,20,47,.13); display: none; flex-direction: column; max-height: calc(100vh - 102px); overflow: auto; padding: 8px 16px 18px; position: absolute; top: 102px; width: 100%; }
+  .workspace-service-nav.is-open { display: flex; }
+  .workspace-service-nav > a { border-bottom: 1px solid var(--line); border-right: 0; min-height: 43px; }
+  .workspace-service-nav > span { display: none; }
+  html[data-theme="dark"] .workspace-service-nav { background: #111b28; }
+  .workspace-site .messages { top: 112px; }
+  .workspace-site .app-main { min-height: calc(100vh - 174px); }
+}

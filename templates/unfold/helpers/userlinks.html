@@ -1,15 +1,12 @@
 {% load i18n %}
 <div class="admin-top-actions">
-  <a class="admin-top-link" href="{% url 'admin_delivery_engine' %}"><span class="material-symbols-outlined">acute</span><span>Service delivery</span></a>
-  <a class="admin-top-link" href="{% url 'admin:operations_incident_changelist' %}"><span class="material-symbols-outlined">emergency</span><span>Incidents</span></a>
   <details class="admin-account-menu">
     <summary><span class="admin-account-avatar">{{ user.first_name|first|default:'T' }}{{ user.last_name|first }}</span><span><strong>{{ user.get_full_name|default:user.email }}</strong><small>Super administrator</small></span><i class="material-symbols-outlined">expand_more</i></summary>
     <div class="admin-account-panel">
       <header><small>Command account</small><strong>{{ user.email|default:user.phone_number }}</strong></header>
-      <section><span>Command</span><a href="{% url 'admin:index' %}"><b>Command overview</b><small>City operational picture</small></a><a href="{% url 'admin_delivery_engine' %}"><b>Service delivery</b><small>Cases, SLAs and handoffs</small></a><a href="{% url 'admin:operations_incident_changelist' %}"><b>Incidents</b><small>Safety response records</small></a><a href="{% url 'admin:operations_servicedeskcase_changelist' %}"><b>Virtual services</b><small>Resident assistance cases</small></a><a href="{% url 'admin:operations_neighborhoodwatchgroup_changelist' %}"><b>Neighborhood Watch</b><small>Community policing network</small></a><a href="{% url 'admin:operations_alert_changelist' %}"><b>Public alerts</b><small>Verified city notices</small></a></section>
-      <section><span>Network & access</span><a href="{% url 'admin:operations_organisation_changelist' %}"><b>Service network</b><small>Authorities, routes and shifts</small></a><a href="{% url 'admin:accounts_user_changelist' %}"><b>Users and access</b><small>Accounts and permissions</small></a><a href="{% url 'admin:operations_operationalrecommendation_changelist' %}"><b>Governance</b><small>Recommendations and audit</small></a></section>
+      <section><span>Profile</span><a href="{% url 'admin:password_change' %}"><b>Security settings</b><small>Update this account password</small></a></section>
       {% include "unfold/helpers/theme_switch.html" %}
-      <footer><a href="{% url 'home' %}">View resident platform</a><form method="post" action="{% url 'admin:logout' %}">{% csrf_token %}<button>Sign out</button></form></footer>
+      <footer><form method="post" action="{% url 'admin:logout' %}">{% csrf_token %}<button>Sign out</button></form></footer>
     </div>
   </details>
 </div>

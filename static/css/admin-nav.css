@@ -1,0 +1,22 @@
+/* Full-width administration navigation and live moving operations strip. */
+.admin-civic-strip > .admin-ticker-viewport { display: block; flex: 1; min-width: 0; overflow: hidden; }
+.admin-ticker-track { animation: admin-city-ticker 42s linear infinite; display: flex; width: max-content; }
+.admin-ticker-track:hover { animation-play-state: paused; }
+.admin-ticker-group { align-items: center; display: flex; flex: none; gap: 48px; padding-right: 48px; }
+.admin-ticker-group span { font-size: 10px; white-space: nowrap; }
+.admin-ticker-group span::before { background: #fff; border-radius: 50%; content: ""; display: inline-block; height: 4px; margin: 0 12px 2px 0; opacity: .65; width: 4px; }
+.admin-ticker-group b { color: #d6e1ec; margin-right: 5px; }
+@keyframes admin-city-ticker { to { transform: translateX(-50%); } }
+.admin-platform-nav { align-items: center; background: #f4f6f9; border-bottom: 1px solid var(--ops-line); display: flex; min-height: 44px; overflow-x: auto; padding: 0 16px; scrollbar-width: thin; white-space: nowrap; }
+.admin-platform-nav a { align-items: center; border-right: 1px solid #dfe5ec; color: var(--ops-ink); display: flex; font-size: 10px; font-weight: 650; min-height: 44px; padding: 0 14px; }
+.admin-platform-nav a:first-child { background: #011f4b; color: #fff; }
+.admin-platform-nav a:hover { background: #e8edf3; }
+.admin-platform-nav a:first-child:hover { background: #0b3263; }
+.admin-platform-nav i { background: #b8c3cf; flex: 0 0 auto; height: 20px; margin: 0 8px; width: 1px; }
+.admin-account-panel { min-width: 310px; }
+.admin-account-panel > footer { justify-content: flex-end; }
+.dark .admin-platform-nav { background: #162131; border-color: #334155; }
+.dark .admin-platform-nav a { border-color: #334155; color: #e6edf5; }
+.dark .admin-platform-nav a:hover { background: #223147; }
+@media (prefers-reduced-motion: reduce) { .admin-ticker-track { animation: none; } .admin-ticker-group:nth-child(2) { display: none; } }
+@media (max-width: 800px) { .admin-platform-nav { padding-inline: 8px; } .admin-platform-nav a { padding-inline: 11px; } .admin-civic-strip > a { display: none; } }

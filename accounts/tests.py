@@ -15,7 +15,7 @@ class PhoneAccountTests(TestCase):
         )
         self.client.force_login(resident)
         authenticated = self.client.get(reverse("home"))
-        self.assertContains(authenticated, "Open dashboard")
+        self.assertContains(authenticated, "My workspace")
         self.assertContains(authenticated, "Sign out")
         self.assertNotContains(authenticated, ">Sign in<")
 

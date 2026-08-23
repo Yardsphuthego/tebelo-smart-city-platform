@@ -44,6 +44,7 @@
         <span></span><span></span><span></span><b>Menu</b>
       </button>
       <nav class="public-primary-nav" id="public-navigation" data-public-navigation aria-label="Primary navigation">
+        {% if user.is_authenticated %}<a class="public-nav-link" href="{% url 'dashboard' %}">My workspace</a>{% endif %}
         <details class="public-nav-dropdown">
           <summary>City services <i></i></summary>
           <div class="public-dropdown-panel">
@@ -67,6 +68,7 @@
         </details>
         <a class="public-nav-link" href="{% url 'city_map' %}">Explore Gaborone</a>
         <a class="public-nav-link" href="{% url 'alerts' %}">City status</a>
+        {% if user.is_authority %}<details class="public-nav-dropdown"><summary>Authority <i></i></summary><div class="public-dropdown-panel"><span>Authority operations</span><a href="{% url 'delivery_command' %}"><strong>Service delivery</strong><small>Cases, deadlines and handoffs</small></a><a href="{% url 'command_dashboard' %}"><strong>Incident command</strong><small>Operational incident queue</small></a>{% if can_manage_watch %}<a href="{% url 'watch_command' %}"><strong>Watch oversight</strong><small>Community policing coordination</small></a>{% endif %}{% if user.is_staff %}<a href="{% url 'admin:index' %}"><strong>Administration</strong><small>System management and governance</small></a>{% endif %}</div></details>{% endif %}
         <details class="public-nav-dropdown theme-dropdown">
           <summary><span class="account-label"><span class="theme-symbol">◐</span><span data-theme-label>System</span></span><i></i></summary>
           <div class="public-dropdown-panel theme-panel">
@@ -81,11 +83,7 @@
           <div class="public-dropdown-panel account-panel">
             {% if user.is_authenticated %}
               <span>Signed in as {{ user.phone_number|default:user.email }}</span>
-              <a href="{% url 'dashboard' %}"><strong>Open dashboard</strong><small>Your TEBELO workspace</small></a>
-              <a href="{% url 'my_reports' %}"><strong>My reports</strong><small>Track response progress</small></a>
-              <a href="{% url 'around_me' %}"><strong>Around me</strong><small>Nearby verified activity</small></a>
               <a href="{% url 'profile' %}"><strong>Account settings</strong><small>Profile and alert preferences</small></a>
-              {% if user.is_authority %}<span>Authority operations</span><a href="{% url 'delivery_command' %}"><strong>Service delivery</strong><small>Cases, deadlines and handoffs</small></a><a href="{% url 'command_dashboard' %}"><strong>Incident command</strong><small>Operational incident queue</small></a>{% if can_manage_watch %}<a href="{% url 'watch_command' %}"><strong>Watch oversight</strong><small>Community policing coordination</small></a>{% endif %}{% if user.is_staff %}<a href="{% url 'admin:index' %}"><strong>Platform administration</strong><small>System management and governance</small></a>{% endif %}{% endif %}
               <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="public-signout" type="submit">Sign out</button></form>
             {% else %}
               <span>Resident and authority access</span>

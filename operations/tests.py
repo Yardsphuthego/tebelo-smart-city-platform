@@ -449,8 +449,14 @@ class PageTests(TestCase):
         response = self.client.get(reverse("dashboard"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "civic-top-strip")
+        self.assertContains(response, "workspace-service-nav")
         self.assertContains(response, "workspace-account-menu")
         self.assertContains(response, "My reports")
+        account_panel = response.content.decode().split('class="workspace-account-panel"', 1)[1].split("</details>", 1)[0]
+        self.assertIn("Account settings", account_panel)
+        self.assertIn("Appearance", account_panel)
+        self.assertNotIn("My reports", account_panel)
+        self.assertNotIn("Authority operations", account_panel)
         self.assertNotContains(response, "app-sidebar")
 
     def test_unfold_operations_dashboard_renders_for_staff(self):
@@ -463,7 +469,13 @@ class PageTests(TestCase):
         self.assertContains(response, "Gaborone Command")
         self.assertContains(response, "Active incident queue")
         self.assertContains(response, "admin-civic-strip")
+        self.assertContains(response, "admin-ticker-track")
+        self.assertContains(response, "admin-platform-nav")
         self.assertContains(response, "admin-account-menu")
+        account_panel = response.content.decode().split('class="admin-account-panel"', 1)[1].split("</details>", 1)[0]
+        self.assertIn("Security settings", account_panel)
+        self.assertNotIn("Service delivery", account_panel)
+        self.assertNotIn("Incidents", account_panel)
         self.assertNotContains(response, 'id="nav-sidebar"')
         self.assertContains(response, "js/loading.js")
         self.assertIn("'unsafe-eval'", response.headers["Content-Security-Policy"])
@@ -484,7 +496,8 @@ class PageTests(TestCase):
         self.assertEqual(workspace.status_code, 200)
         self.assertContains(workspace, "Delivery command")
         self.assertContains(workspace, "Unified operational queue")
-        self.assertContains(workspace, "Network & access")
+        self.assertContains(workspace, "Users & access")
+        self.assertContains(workspace, "admin-platform-nav")
         self.assertContains(workspace, "admin-account-menu")
         self.assertContains(workspace, "css/admin.css")
         self.assertNotContains(workspace, "app-sidebar")
