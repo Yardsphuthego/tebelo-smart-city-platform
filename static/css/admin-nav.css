@@ -1,13 +1,12 @@
 /* Full-width administration navigation and live moving operations strip. */
 .admin-visually-hidden { height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; clip: rect(0 0 0 0); white-space: nowrap; }
-.overview-command-notice { align-items: center; background: linear-gradient(100deg,#00142f,#011f4b 65%,#7088a6 150%); border-radius: 5px; color: #fff; display: flex; height: 34px; margin-bottom: 12px; max-height: 34px; opacity: 1; overflow: hidden; transition: margin 220ms ease,max-height 220ms ease,opacity 170ms ease; }
-.overview-command-notice > strong { align-items: center; align-self: stretch; background: rgba(112,136,166,.24); display: flex; flex: 0 0 auto; font-size: 8px; letter-spacing: .07em; padding: 0 13px; text-transform: uppercase; }
-.overview-command-notice > div { flex: 1; min-width: 0; overflow: hidden; }
-.overview-command-notice p { animation: command-notice-pass 8s linear forwards; font-size: 9px; margin: 0; padding-left: 100%; white-space: nowrap; width: max-content; }
-.overview-command-notice button { align-items: center; align-self: stretch; background: transparent; border: 0; border-left: 1px solid rgba(255,255,255,.16); color: #fff; cursor: pointer; display: flex; padding: 0 9px; }
-.overview-command-notice button span { font-size: 15px; }.overview-command-notice.is-dismissed { margin-bottom: 0; max-height: 0; opacity: 0; pointer-events: none; }
+.overview-command-index { align-items: center; background: linear-gradient(90deg,#fff,#f7f9fb 50%,#fff); border: 1px solid #e7ecf2; box-shadow: 0 8px 24px rgba(0,20,47,.06); color: #00142f; display: flex; gap: 23px; justify-content: center; margin-bottom: 12px; min-height: 50px; overflow-x: auto; padding: 7px 20px; scrollbar-width: none; white-space: nowrap; }
+.overview-command-index::-webkit-scrollbar { display: none; }
+.overview-command-index span,.overview-command-index time { font-size: 8px; font-style: normal; font-weight: 700; letter-spacing: .28em; text-transform: uppercase; }
+.overview-command-index .command-index-edge { font-weight: 500; }.overview-command-index .command-index-edge b { font-weight: 800; }
+.overview-command-index > strong { align-items: center; background: #00142f; border-radius: 50%; color: #fff; display: flex; flex: 0 0 auto; font: 800 9px 'Manrope',sans-serif; height: 32px; justify-content: center; letter-spacing: .04em; width: 32px; }
+.overview-command-index time { font-weight: 500; }
 .overview-actions-row { justify-content: flex-end; margin-bottom: 18px; }
-@keyframes command-notice-pass { from { transform: translateX(0); } to { transform: translateX(-100%); } }
 .admin-civic-strip > .admin-ticker-viewport { display: block; flex: 1; min-width: 0; overflow: hidden; }
 .admin-ticker-track { animation: admin-city-ticker 42s linear infinite; display: flex; width: max-content; }
 .admin-ticker-track:hover { animation-play-state: paused; }
@@ -48,8 +47,9 @@
 .dark .admin-platform-nav a.is-active { background: #223147; color: #fff; }
 .dark .admin-platform-nav a.is-active::after { background: #9db4d1; }
 .dark .admin-platform-nav a:first-child.is-active { background: #011f4b; }
+.dark .overview-command-index { background: linear-gradient(90deg,#111827,#172033 50%,#111827); border-color: #334155; color: #eef3f8; }
 .dark .admin-create-panel { background: #111827; border-color: #334155; }.dark .admin-create-panel > a { color: #e6edf5; }.dark .admin-create-panel > a:hover { background: #202b3e; }.dark .admin-create-panel > span:not(:first-child) { border-color: #334155; }
-@media (prefers-reduced-motion: reduce) { .admin-ticker-track,.admin-platform-nav a.is-active::after,.overview-command-notice p { animation: none; } .overview-command-notice p { padding-left: 12px; }.admin-ticker-group:nth-child(2) { display: none; } }
+@media (prefers-reduced-motion: reduce) { .admin-ticker-track,.admin-platform-nav a.is-active::after { animation: none; }.admin-ticker-group:nth-child(2) { display: none; } }
 @media (max-width: 900px) { .overview-actions-row { display: grid; grid-template-columns: repeat(3,1fr); }.overview-actions-row .ops-button { width: 100%; } }
 @media (max-width: 800px) { .admin-platform-nav { padding-inline: 8px; } .admin-platform-nav a { padding-inline: 11px; } .admin-civic-strip > a { display: none; } .admin-create-menu > summary b { display: none; } .admin-create-panel { min-width: min(360px,calc(100vw - 24px)); position: fixed; right: 12px; top: 104px; } }
-@media (max-width: 560px) { .overview-command-notice > strong { padding-inline: 9px; }.overview-actions-row { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .overview-command-index { gap: 17px; justify-content: flex-start; }.overview-actions-row { grid-template-columns: 1fr; } }

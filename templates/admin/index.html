@@ -8,10 +8,13 @@
 {% block content %}
 <div class="ops-dashboard">
   <h1 class="admin-visually-hidden">Gaborone Command</h1>
-  <section class="overview-command-notice" data-command-notice aria-label="Gaborone Command update">
-    <strong>Gaborone Command</strong>
-    <div><p data-command-notice-text>City safety and public-service activity · Updated {{ updated_at|date:"H:i:s" }} CAT</p></div>
-    <button type="button" data-command-notice-close aria-label="Dismiss command update"><span class="material-symbols-outlined">close</span></button>
+  <section class="overview-command-index" aria-label="Gaborone Command update">
+    <span class="command-index-edge">← <b>Gaborone</b></span>
+    <span>Command</span>
+    <strong>GC</strong>
+    <span>City safety</span>
+    <span>Public services</span>
+    <time>Updated {{ updated_at|date:"H:i:s" }} CAT&nbsp; →</time>
   </section>
   <div class="ops-actions overview-actions-row">
     <a href="{{ incident_changelist_url }}" class="ops-button secondary"><span class="material-symbols-outlined">view_list</span>Incident queue</a>

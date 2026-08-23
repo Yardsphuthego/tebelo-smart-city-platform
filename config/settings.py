@@ -131,7 +131,7 @@ UNFOLD = {
         lambda request: static("css/interactions.css"),
         lambda request: static("css/palette.css"),
     ],
-    "SCRIPTS": [lambda request: static("js/loading.js"), lambda request: static("js/admin-overview.js")],
+    "SCRIPTS": [lambda request: static("js/loading.js")],
     "COLORS": {
         "primary": {
             "50": "#f4f6f9", "100": "#e8eef5", "200": "#d7e0ea",
