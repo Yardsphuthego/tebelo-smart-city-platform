@@ -470,6 +470,7 @@ class PageTests(TestCase):
         response = self.client.get(reverse("admin:index"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Gaborone Command")
+        self.assertContains(response, "overview-command-strip")
         self.assertContains(response, "Active incident queue")
         self.assertContains(response, "admin-civic-strip")
         self.assertContains(response, "admin-ticker-track")
