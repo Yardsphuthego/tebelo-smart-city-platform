@@ -3,7 +3,7 @@
 {% block head %}<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css">{% endblock %}
 {% block content %}
 <section class="workspace-page">
-  <header class="workspace-heading"><div><span class="kicker">Operational overview</span><h1>Gaborone</h1><p>Current city safety and public-service activity. Updated {{ updated_at|date:'H:i' }} CAT.</p></div><div class="heading-actions"><a class="button button-light" href="{% url 'around_me' %}">Use my location</a><a class="button button-primary" href="{% url 'report_incident' %}">Report incident</a></div></header>
+  <header class="workspace-heading city-overview-heading"><div class="city-overview-row"><div class="city-overview-title"><span class="kicker">Operational overview</span><h1>Gaborone</h1></div><div class="city-overview-subtitle"><p>Current city safety and public-service activity. <span>·</span> Updated <time>{{ updated_at|date:'H:i' }} CAT</time></p></div></div><div class="heading-actions"><a class="button button-light" href="{% url 'around_me' %}">Use my location</a><a class="button button-primary" href="{% url 'report_incident' %}">Report incident</a></div></header>
   <div class="overview-kpis">
     <article><div><small>City status</small><strong class="text-status">{{ city_status }}</strong></div><span class="status-indicator {{ city_status|lower }}"></span><p>{{ status_detail }}</p></article>
     <article><div><small>Active public incidents</small><strong>{{ city_metrics.active }}</strong></div><span class="metric-symbol">◎</span><p>Verified information on the city map</p></article>

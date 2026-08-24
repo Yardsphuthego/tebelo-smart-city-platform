@@ -444,6 +444,17 @@ class PageTests(TestCase):
                 self.assertContains(response, "js/loading.js")
                 self.assertNotContains(response, "app-sidebar")
 
+    def test_public_overview_uses_faded_subtitle_heading(self):
+        resident = User.objects.create_user(
+            email="overview-heading@example.com",
+            password="Very-secure-pass-123",
+        )
+        self.client.force_login(resident)
+        response = self.client.get(reverse("dashboard"))
+        self.assertContains(response, "city-overview-heading")
+        self.assertContains(response, "city-overview-subtitle")
+        self.assertContains(response, "Current city safety and public-service activity")
+
     def test_landing_and_authenticated_dashboard_are_separate(self):
         landing = self.client.get(reverse("home"))
         self.assertNotContains(landing, "Your digital connection to Gaborone")
