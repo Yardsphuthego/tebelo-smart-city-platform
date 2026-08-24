@@ -49,6 +49,14 @@ python manage.py configure_gaborone_authorities
 
 This command is idempotent. It marks external agencies as `Authority onboarding`, creates the TEBELO command centre, routes every installed incident and virtual-service type, and adds active super administrators to daily command oversight. Change an agency to `Authority connected` only after its authorised staff, operating agreement and escalation contacts have been confirmed.
 
+To evaluate the complete workflow locally or in an isolated staging environment, load the synthetic Gaborone operating scenario:
+
+```bash
+python manage.py populate_gaborone_scenario
+```
+
+The command is idempotent and preserves existing accounts. It creates clearly identified scenario residents and authority staff, Gaborone areas, duty coverage, incidents, public alerts, neighbourhood-watch groups, virtual-service conversations, delivery deadlines, handoffs, recommendations and audit activity. Newly created scenario accounts use `TebeloDemo!2026`; override it with `--password`. Do not load synthetic scenario records into a live production database.
+
 The provided Compose deployment starts a single `delivery-engine` service after the web application is healthy. For a non-Compose deployment, run the engine at least once per minute from the production scheduler:
 
 ```bash

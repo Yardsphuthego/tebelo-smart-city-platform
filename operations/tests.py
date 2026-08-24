@@ -15,6 +15,7 @@ from .delivery import (
     respond_handoff,
 )
 from .models import (
+    Alert,
     AuthorityHandoff,
     AuthorityNotification,
     DeliveryCase,
@@ -400,6 +401,34 @@ class GaboroneAuthorityConfigurationTests(TestCase):
             DutyAssignment.objects.filter(shift__organisation=command_centre, user=administrator).count(),
             1,
         )
+
+
+class GaboroneScenarioPopulationTests(TestCase):
+    def test_population_is_complete_and_idempotent(self):
+        output = StringIO()
+        call_command("populate_gaborone_scenario", stdout=output)
+        first_counts = {
+            "incidents": Incident.objects.filter(reference__startswith="DEMO-GAB-").count(),
+            "services": ServiceDeskCase.objects.filter(reference__startswith="DEMO-").count(),
+            "delivery": DeliveryCase.objects.count(),
+            "alerts": Alert.objects.filter(title__startswith="Gaborone").count(),
+            "watches": NeighborhoodWatchGroup.objects.filter(reference__startswith="DEMO-NW-").count(),
+        }
+        call_command("populate_gaborone_scenario", stdout=output)
+
+        self.assertEqual(first_counts, {
+            "incidents": 12,
+            "services": 4,
+            "delivery": 16,
+            "alerts": 3,
+            "watches": 3,
+        })
+        self.assertEqual(Incident.objects.filter(reference__startswith="DEMO-GAB-").count(), 12)
+        self.assertEqual(ServiceDeskCase.objects.filter(reference__startswith="DEMO-").count(), 4)
+        self.assertEqual(DeliveryCase.objects.count(), 16)
+        self.assertTrue(User.objects.get(email="resident.one@demo.tebelo.bw").check_password("TebeloDemo!2026"))
+        self.assertTrue(Incident.objects.filter(is_public=True, resolved_at__isnull=False).exists())
+        self.assertTrue(DeliveryCase.objects.filter(escalation_level=1).exists())
 
 
 class PageTests(TestCase):
